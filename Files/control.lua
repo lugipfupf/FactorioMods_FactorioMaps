@@ -1,11 +1,11 @@
-game.on_init(function()
+script.on_init(function()
 	firstruntimer = 120
 	firstrun = true
 end)
 
-game.on_load(function()
-	drawshowmenubutton()
-end)
+--script.on_load(function()
+--	drawshowmenubutton()
+--end)
 
 -- GLOBAL
 tf1="";tf2="";tf3="";tf4="";tf5=""; -- save text field variables on menu minimize
@@ -25,7 +25,7 @@ showalt = false
 
 -- ON TICK
 counter = 0
-game.on_event(defines.events.on_tick, function(event)
+script.on_event(defines.events.on_tick, function(event)
 
 	-- DRAW MENU ON INIT
 	if(firstrun) then
@@ -46,7 +46,7 @@ end)
 
 help = false
 -- ON GUI CLICK
-game.on_event(defines.events.on_gui_click, function(event)
+script.on_event(defines.events.on_gui_click, function(event)
 
 	-- BUTTON SHOW MENU
 	if(event.element.name=="showmenu") then

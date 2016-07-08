@@ -150,6 +150,6 @@ function addoutline()
 </body>
 </html>]]
 
-    game.makefile(pathname, indextext)
+    game.write_file(pathname, indextext)
 
 end
