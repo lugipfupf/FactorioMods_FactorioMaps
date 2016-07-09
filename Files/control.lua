@@ -303,24 +303,23 @@ function cropbase(player_index)
 --					game.players[player_index].print(b.prototype.name)
 --			end
 
+            local entityFilter = {
+                force = game.players[player_index].force.name,
+                area = {
+                    {x-step/2, y-step/2},
+                    {x+step/2, y+step/2}
+                }
+            };
 
-			for _,v in pairs(game.players[player_index].surface.find_entities{{x-step/2, y-step/2}, {x+step/2, y+step/2}}) do
+			for _,v in pairs(game.players[player_index].surface.find_entities_filtered(entityFilter)) do
+				if (v.prototype.name ~= "player") then -- if it's not a player
+                    if v.position then
+                        minx = math.min(minx, v.position.x)
+                        miny = math.min(miny, v.position.y)
 
-				if(v.force.name == "player" and v.name ~= "player") then -- if owner = player, and it's not the player himself
-
-					if(x>maxx) then
-						maxx = x
-					end
-					if(x<minx) then
-						minx = x
-					end
-					if(y>maxy) then
-						maxy = y
-					end
-					if(y<miny) then
-						miny = y
-					end
-				break
+                        maxx = math.max(maxx, v.position.x)
+                        maxy = math.max(maxy, v.position.y)
+                    end
 				end
 			end
 		end
