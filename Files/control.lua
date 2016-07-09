@@ -422,13 +422,11 @@ function generatescreenshots(player_index)
 	ingameresolution = 0 -- default
 
 	local squaresize = gridpixelarray[gridsizeindex]
-	local ingametotalwidth = (-1*txtTopLeftX.text+txtBottomRightX.text)
-	local ingametotalheight = (-1*txtTopLeftY.text+txtBottomRightY.text)
+	local ingametotalwidth = math.ceil(math.abs(txtTopLeftX.text) + math.abs(txtBottomRightX.text))
+	local ingametotalheight = math.ceil(math.abs(txtTopLeftY.text) + math.abs(txtBottomRightY.text))
 	local numberofhorizontalscreenshots = math.ceil(ingametotalwidth/squaresize)
 	local numberofverticalscreenshots =  math.ceil(ingametotalheight/squaresize)
 	local zooming = 1 -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
-
-
 
 	-- delete folder (if it already exists)
 	game.remove_path("FactorioMaps/".. txtFolderName.text)
@@ -436,7 +434,7 @@ function generatescreenshots(player_index)
 	-- calculate min/max zoom levels
 	--
 	minzoom = 0 -- lvl 0 is always 256x256, the resolution in which google maps calculates positions
-	maxzoom=0 -- default
+	maxzoom = 0 -- default
 
 	local resolutionarray = {8, 16,32,64,128,256,512,1024,2048,4096,8192} -- resolution for each zoom level, lvl 0 is always 8x8 (256x256 pixels)
 
@@ -516,5 +514,4 @@ function generatescreenshots(player_index)
 		numberofhorizontalscreenshots = math.ceil(numberofhorizontalscreenshots/2)
 		numberofverticalscreenshots = math.ceil(numberofverticalscreenshots/2)
 	end
-
 end
