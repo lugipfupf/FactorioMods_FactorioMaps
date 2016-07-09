@@ -69,10 +69,10 @@ script.on_event(defines.events.on_gui_click, function(event)
 	-- BUTTON RESET DAYTIME
 	if(event.element.name == "resetdaytime") then
 		if(currentdaytime ~= nil) then
-            --Time has advanced since we stored the time.
-            --Add stored time to current surface time to keep ticks and day/night cycle in "sync".
-            currentdaytime = currentdaytime + game.players[event.player_index].surface.daytime;
-            if currentdaytime > 1 then currentdaytime = currentdaytime - 1; end
+			--Time has advanced since we stored the time.
+			--Add stored time to current surface time to keep ticks and day/night cycle in "sync".
+			currentdaytime = currentdaytime + game.players[event.player_index].surface.daytime;
+			if currentdaytime > 1 then currentdaytime = currentdaytime - 1; end
 			game.players[event.player_index].surface.daytime = currentdaytime
 		end
 	end
@@ -158,7 +158,7 @@ script.on_event(defines.events.on_gui_click, function(event)
 
 
 		foldernamesize =  "Map" .. "("..(-1*minx	 + maxx) .. "," .. (-1*miny + maxy) .. ")"
-        updatefilename()
+		updatefilename()
 	end
 
 	-- CROP BASE BUTTON
@@ -307,23 +307,23 @@ function cropbase(player_index)
 --					game.players[player_index].print(b.prototype.name)
 --			end
 
-            local entityFilter = {
-                force = game.players[player_index].force.name,
-                area = {
-                    {x-step/2, y-step/2},
-                    {x+step/2, y+step/2}
-                }
-            };
+			local entityFilter = {
+				force = game.players[player_index].force.name,
+				area = {
+					{x-step/2, y-step/2},
+					{x+step/2, y+step/2}
+				}
+			};
 
 			for _,v in pairs(game.players[player_index].surface.find_entities_filtered(entityFilter)) do
 				if (v.prototype.name ~= "player") then -- if it's not a player
-                    if v.position then
-                        minx = math.min(minx, v.position.x)
-                        miny = math.min(miny, v.position.y)
+					if v.position then
+						minx = math.min(minx, v.position.x)
+						miny = math.min(miny, v.position.y)
 
-                        maxx = math.max(maxx, v.position.x)
-                        maxy = math.max(maxy, v.position.y)
-                    end
+						maxx = math.max(maxx, v.position.x)
+						maxy = math.max(maxy, v.position.y)
+					end
 				end
 			end
 		end
