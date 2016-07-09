@@ -1,4 +1,3 @@
-require "defines"
 require "Files/control"
 
 require "Files/gui_layout"

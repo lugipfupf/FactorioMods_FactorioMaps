@@ -360,7 +360,7 @@ end
 
 function drawshowmenubutton()
 	-- draw initial menu button
-	for k,_ in ipairs(game.players) do
+	for k,_ in pairs(game.players) do
 		if(game.players[k].gui.top.showmenu == nil) then
 			game.players[k].gui.top.add({type="button", name="showmenu", caption="Show Menu"})
 		end
