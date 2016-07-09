@@ -63,13 +63,17 @@ script.on_event(defines.events.on_gui_click, function(event)
 
 	-- BUTTON SET DAYTIME
 	if(event.element.name == "setdaytime") then
-		currentdaytime = game.daytime
-		game.daytime = 0
+		currentdaytime = game.players[event.player_index].surface.daytime;
+		game.players[event.player_index].surface.daytime = 0
 	end
 	-- BUTTON RESET DAYTIME
 	if(event.element.name == "resetdaytime") then
 		if(currentdaytime ~= nil) then
-			game.daytime = currentdaytime
+            --Time has advanced since we stored the time.
+            --Add stored time to current surface time to keep ticks and day/night cycle in "sync".
+            currentdaytime = currentdaytime + game.players[event.player_index].surface.daytime;
+            if currentdaytime > 1 then currentdaytime = currentdaytime - 1; end
+			game.players[event.player_index].surface.daytime = currentdaytime
 		end
 	end
 
