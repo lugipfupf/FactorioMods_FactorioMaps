@@ -329,10 +329,17 @@ function cropbase(player_index)
 		end
 	end
 	if(minx ~= 10000 and miny ~= 10000 and maxx ~= -10000 and maxy ~= -10000) then
-		txtTopLeftX.text = minx-15 -- 15 = arbitrairy number, to get the screenshot edge just outside of the base,
-		txtTopLeftY.text = miny-15 -- instead of right on the outer walls
-		txtBottomRightX.text = maxx+15
-		txtBottomRightY.text = maxy+15
+		minx = minx-15 -- 15 = arbitrairy number, to get the screenshot edge just outside of the base,
+		miny = miny-15 -- instead of right on the outer walls
+		maxx = maxx+15
+		maxy = maxy+15
+
+		--Align to chunk grid with modolus math trick.
+		txtTopLeftX.text = minx - minx % 32
+		txtTopLeftY.text = miny - miny % 32
+		txtBottomRightX.text = maxx + (32 - maxx % 32)
+		txtBottomRightY.text = maxy + (32 - maxy % 32)
+
 
 		--if(math.ceil(-1*minx/32 + maxx/32) >50 or math.ceil(-1*miny/32 + maxy/32)>50)
 
