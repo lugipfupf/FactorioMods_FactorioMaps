@@ -1,1 +1,1 @@
-require "Files/gui_style"
+require "prototypes.style"
