@@ -1,7 +1,3 @@
-.*
 
-!.git*
-
-pkg
-
-*.zip
+#Ignore release builds
+/build/
