@@ -330,14 +330,17 @@ function cropbase(player_index)
 	end
 	if(minx ~= 10000 and miny ~= 10000 and maxx ~= -10000 and maxy ~= -10000) then
 		--Align to chunk grid with modolus math trick then add a chunk for good measure.
-		txtTopLeftX.text = minx - (minx % 32) + 32
-		txtTopLeftY.text = miny - (miny % 32) + 32
-		txtBottomRightX.text = maxx + (32 - maxx % 32) + 32
-		txtBottomRightY.text = maxy + (32 - maxy % 32) + 32
+		minx = minx - (minx % 32) + 32
+		miny = miny - (miny % 32) + 32
+		maxx = maxx + (32 - maxx % 32) + 32
+		maxy = maxy + (32 - maxy % 32) + 32
 
+		txtTopLeftX.text = minx
+		txtTopLeftY.text = miny
+		txtBottomRightX.text = maxx
+		txtBottomRightY.text = maxy
 
 		--if(math.ceil(-1*minx/32 + maxx/32) >50 or math.ceil(-1*miny/32 + maxy/32)>50)
-
 
 		foldernamesize = "Map" .. "(".. math.ceil(-1*minx/32 + maxx/32) .. "," .. math.ceil(-1*miny/32 + maxy/32) .. ")"
 		updatefilename()
@@ -498,7 +501,7 @@ function generatescreenshots(player_index)
 				local positiontext = {txtTopLeftX.text + (1/(2*zooming))*squaresize + x*(1/zooming)*squaresize, txtTopLeftY.text + (1/(2*zooming))*squaresize + y*(1/zooming)*squaresize}
 				local resolutiontext = {gridsizearray[gridsizeindex],gridsizearray[gridsizeindex]}
 				local pathtext = "FactorioMaps/".. txtFolderName.text .. "/Images/".. z .."_".. x .."_".. y ..".".. extension
-				game.take_screenshot{position=positiontext, resolution=resolutiontext ,zoom=zooming, path= pathtext, show_entity_info=showalt}
+				game.take_screenshot({position=positiontext, resolution=resolutiontext, zoom=zooming, path= pathtext, show_entity_info=showalt})
 			end
 		end
 
