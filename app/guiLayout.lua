@@ -1,31 +1,45 @@
+require "stdlib.gui.gui"
+require "guiEventHandlers"
 
 --------------------------------
 -- MAIN WINDOW
 --------------------------------
-function checkMainWindow(player)
-    if(player.gui.left.FactorioMaps ~= nil) then
+function checkMainWindow(player_index_or_name)
+    local player = game.players[player_index_or_name];
+    if (not player or not player.valid or not player.connected) then
+        return false;
+    end
+    if (player.gui.left.FactorioMaps ~= nil) then
         return true;
     end
     return false;    
 end
 
-function getMainWindow(player)
-    if(checkMainWindow(player)) then
+function getMainWindow(player_index_or_name)
+    local player = game.players[player_index_or_name];
+    if (not player or not player.valid or not player.connected) then
+        return nil;
+    end
+    if (checkMainWindow(player_index_or_name)) then
         return player.gui.left.FactorioMaps;
     end
     return nil;
 end
     
-function showMainWindow(player)
-    if(not checkMainWindow(player)) then
+function showMainWindow(player_index_or_name)
+    local player = game.players[player_index_or_name];
+    if (not player or not player.valid or not player.connected) then
+        return;
+    end
+    if (not checkMainWindow(player_index_or_name)) then
         player.gui.left.add({type="frame", name="FactorioMaps", caption={"label-main-window"}, direction="horizontal"});
-        showLeftPane(player);
+        showLeftPane(player_index_or_name);
     end
 end
 
-function hideMainWindow(player)
-    local mainWindow = getMainWindow(player);
-    if(mainWindow) then
+function hideMainWindow(player_index_or_name)
+    local mainWindow = getMainWindow(player_index_or_name);
+    if (mainWindow) then
         mainWindow.destroy();
     end
 end
@@ -33,37 +47,38 @@ end
 --------------------------------
 -- MAIN WINDOW LEFT PANE
 --------------------------------
-function checkLeftPane(player)
-    if(checkMainWindow(player)) then
-        local mainWindow = getMainWindow(player);
-        if(mainWindow.Left ~= nil) then
+function checkLeftPane(player_index_or_name)
+    if (checkMainWindow(player_index_or_name)) then
+        local mainWindow = getMainWindow(player_index_or_name);
+        if (mainWindow.Left ~= nil) then
             return true;
         end
     end
     return false;    
 end
 
-function getLeftPane(player)
-    if(checkLeftPane(player)) then
-        return getMainWindow(player).Left;
+function getLeftPane(player_index_or_name)
+    if (checkLeftPane(player_index_or_name)) then
+        return getMainWindow(player_index_or_name).Left;
     end
     return nil;
 end
     
-function showLeftPane(player)
-    if(checkLeftPane(player)) then
+function showLeftPane(player_index_or_name)
+    if (checkLeftPane(player_index_or_name)) then
         return;
     end
-    if(not checkMainWindow(player)) then
-        showMainWindow(player);
+    if (not checkMainWindow(player_index_or_name)) then
+        showMainWindow(player_index_or_name);
+        return;
     end
-    local mainWindow = getMainWindow(player);
+    local mainWindow = getMainWindow(player_index_or_name);
     local leftPane = mainWindow.add({type="frame", name="Left", caption={"label-main-settings"}, direction="vertical"});
 
     local topFlow = leftPane.add({type="flow", name="topFlow", direction = "horizontal"});
     local topLeftFlow = topFlow.add({type="flow", name="topLeftFlow", direction = "vertical"});
-    topLeftFlow.add({type="checkbox", name="FactorioMaps_dayOnly",state = true, caption = {"label-day-only"}, tooltip={"tooltip-day-only"}});
-    topLeftFlow.add({type="checkbox", name="FactorioMaps_altInfo",state = true, caption = {"label-alt-info"}, tooltip={"tooltip-alt-info"}});
+    topLeftFlow.add({type="checkbox", name="FactorioMaps_dayOnly", state = true, caption = {"label-day-only"}, tooltip={"tooltip-day-only"}});
+    topLeftFlow.add({type="checkbox", name="FactorioMaps_altInfo", state = true, caption = {"label-alt-info"}, tooltip={"tooltip-alt-info"}});
     local topRightFlow = topFlow.add({type="flow", name="topRightFlow", direction = "horizontal"});
     topRightFlow.add({type="label", name="filler", caption="_____________"});
     topRightFlow.filler.style.font_color = {r=48,g=75, b=74};
@@ -76,17 +91,16 @@ function showLeftPane(player)
     folderFlow.add({type="textfield", name="FactorioMaps_folderName", tooltip={"tooltip-folder-name"}});
 
     local bottomFlow = leftPane.add({type="flow", name="bottomFlow", direction = "horizontal"});
-    bottomFlow.add({type="button", name="FactorioMaps_max-size", style="FactorioMaps_button_style", caption={"button-max-size"}, tooltip={"tooltip-max-size"}});
-    bottomFlow.add({type="button", name="FactorioMaps_base-size", style="FactorioMaps_button_style", caption={"button-base-size"}, tooltip={"tooltip-base-size"}});
+    bottomFlow.add({type="button", name="FactorioMaps_maxSize", style="FactorioMaps_button_style", caption={"button-max-size"}, tooltip={"tooltip-max-size"}});
+    bottomFlow.add({type="button", name="FactorioMaps_baseSize", style="FactorioMaps_button_style", caption={"button-base-size"}, tooltip={"tooltip-base-size"}});
     bottomFlow.add({type="label", name="filler", caption="_____________"});
     bottomFlow.filler.style.font_color = {r=48,g=75, b=74};
     bottomFlow.add({type="button", name="FactorioMaps_generate", style="FactorioMaps_button_style", caption={"button-generate"}, tooltip={"tooltip-generate"}});
-
 end
 
-function hideLeftPane(player)
-    local leftPane = getLeftPane(player);
-    if(leftPane) then
+function hideLeftPane(player_index_or_name)
+    local leftPane = getLeftPane(player_index_or_name);
+    if (leftPane) then
         leftPane.destroy();
     end
 end
@@ -94,68 +108,66 @@ end
 --------------------------------
 -- MAIN WINDOW RIGHT PANE (ADVANCED SETTINGS)
 --------------------------------
-function checkRightPane(player)
-    if(checkMainWindow(player)) then
-        local mainWindow = getMainWindow(player);
-        if(mainWindow.Right ~= nil) then
+function checkRightPane(player_index_or_name)
+    if (checkMainWindow(player_index_or_name)) then
+        local mainWindow = getMainWindow(player_index_or_name);
+        if (mainWindow.Right ~= nil) then
             return true;
         end
     end
     return false;    
 end
 
-function getRightPane(player)
-    if(checkRightPane(player)) then
-        return getMainWindow(player).Right;
+function getRightPane(player_index_or_name)
+    if (checkRightPane(player_index_or_name)) then
+        return getMainWindow(player_index_or_name).Right;
     end
     return nil;
 end
     
-function showRightPane(player)
-    if(checkRightPane(player)) then
+function showRightPane(player_index_or_name)
+    if (checkRightPane(player_index_or_name)) then
         return;
     end
-    if(not checkMainWindow(player)) then
-        showMainWindow(player);
+    if (not checkMainWindow(player_index_or_name)) then
+        showMainWindow(player_index_or_name);
     end
-    local mainWindow = getMainWindow(player);
+    local mainWindow = getMainWindow(player_index_or_name);
 
     local rightPane = mainWindow.add({type="frame", name="Right", caption={"label-advanced-settings"}, direction="vertical"});
-    rightPane.add({type="label", name="label_custom-size", caption = {"label-custom-size"}, tooltip={"tooltip-custom-size"}});
+    rightPane.add({type="checkbox", name="FactorioMaps_customSize", state = false, caption = {"label-custom-size"}, tooltip={"tooltip-custom-size"}});
 
-    local topFlow = rightPane.add({type="flow", name="topFlow", direction = "horizontal"});
-    topFlow.add({type="label", name="label_top-left-xy", caption = {"label-top-left-xy"}, tooltip={"tooltip-top-left-xy"}});
-    local topLeftX = topFlow.add({type="textfield", name="FactorioMaps_top-left-x"});
+    local tbl = rightPane.add({type="table", name="topFlow", colspan = 6});
+    tbl.add({type="label", name="label_top-left-xy", caption = {"label-top-left-xy"}, tooltip={"tooltip-top-left-xy"}});
+    local topLeftX = tbl.add({type="textfield", name="FactorioMaps_topLeftX", tooltip={"tooltip-top-left-x"}});
     topLeftX.style.minimal_width = 50;
     topLeftX.style.maximal_width = 50;
-    local topLeftY = topFlow.add({type="textfield", name="FactorioMaps_top-left-y"});
+    local topLeftY = tbl.add({type="textfield", name="FactorioMaps_topLeftY", tooltip={"tooltip-top-left-y"}});
     topLeftY.style.minimal_width = 50;
     topLeftY.style.maximal_width = 50;
-    topFlow.add({type="sprite-button", name="FactorioMaps_top-left-view", sprite="FactorioMaps_view_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-top-left-view"}});
-    topFlow.add({type="sprite-button", name="FactorioMaps_top-left-return", sprite="FactorioMaps_return_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-top-left-return"}});
-    topFlow.add({type="sprite-button", name="FactorioMaps_top-left-player", sprite="FactorioMaps_player_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-top-left-player"}});
+    tbl.add({type="sprite-button", name="FactorioMaps_topLeftView", sprite="FactorioMaps_view_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-top-left-view"}});
+    tbl.add({type="sprite-button", name="FactorioMaps_topLeftReturn", sprite="FactorioMaps_return_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-top-left-return"}});
+    tbl.add({type="sprite-button", name="FactorioMaps_topLeftPlayer", sprite="FactorioMaps_player_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-top-left-player"}});
 
-    local middleFlow = rightPane.add({type="flow", name="middleFlow", direction = "horizontal"});
-    middleFlow.add({type="label", name="label_bottom-right-xy", caption = {"label-top-left-xy"}, tooltip={"tooltip-top-left-xy"}});
-    local bottomRightX = middleFlow.add({type="textfield", name="label_bottom-right-x"});
+    tbl.add({type="label", name="label_bottom-right-xy", caption = {"label-bottom-right-xy"}, tooltip={"tooltip-bottom-right-xy"}});
+    local bottomRightX = tbl.add({type="textfield", name="FactorioMaps_bottomRightX", tooltip={"tooltip-bottom-right-x"}});
     bottomRightX.style.minimal_width = 50;
     bottomRightX.style.maximal_width = 50;
-    local bottomRightY = middleFlow.add({type="textfield", name="label_bottom-right-y"});
+    local bottomRightY = tbl.add({type="textfield", name="FactorioMaps_bottomRightY", tooltip={"tooltip-bottom-right-y"}});
     bottomRightY.style.minimal_width = 50;
     bottomRightY.style.maximal_width = 50;
-    middleFlow.add({type="sprite-button", name="FactorioMaps_bottom-right-view", sprite="FactorioMaps_view_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-bottom-right-view"}});
-    middleFlow.add({type="sprite-button", name="FactorioMaps_bottom-right-return", sprite="FactorioMaps_return_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-bottom-right-return"}});
-    middleFlow.add({type="sprite-button", name="FactorioMaps_bottom-right-player", sprite="FactorioMaps_player_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-bottom-right-player"}});
+    tbl.add({type="sprite-button", name="FactorioMaps_bottomRightView", sprite="FactorioMaps_view_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-bottom-right-view"}});
+    tbl.add({type="sprite-button", name="FactorioMaps_bottomRightReturn", sprite="FactorioMaps_return_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-bottom-right-return"}});
+    tbl.add({type="sprite-button", name="FactorioMaps_bottomRightPlayer", sprite="FactorioMaps_player_sprite", style="FactorioMaps_sprite_button", tooltip={"tooltip-bottom-right-player"}});
 
     local middleFlow2 = rightPane.add({type="flow", name="middleFlow2", direction = "horizontal"});
     local middleFlow3 = rightPane.add({type="flow", name="middleFlow3", direction = "horizontal"});
     local bottomFlow = rightPane.add({type="flow", name="bottomFlow", direction = "horizontal"});
-
 end
 
-function hideRightPane(player)
-    local rightPane = getRightPane(player);
-    if(rightPane) then
+function hideRightPane(player_index_or_name)
+    local rightPane = getRightPane(player_index_or_name);
+    if (rightPane) then
         rightPane.destroy();
     end
 end
@@ -168,12 +180,12 @@ end
 
 function drawgui(player_index)
 
-	if(ui ~= nil) then
+	if (ui ~= nil) then
 		savevalues(player_index)
 	end
 
 
-	if(game.players[player_index].gui.left.factoriomaps ~= nil) then
+	if (game.players[player_index].gui.left.factoriomaps ~= nil) then
 		game.players[player_index].gui.left.factoriomaps.destroy()
 	end
 		game.players[player_index].gui.left.add({type="frame", name="factoriomaps", caption="Factorio Maps", direction="horizontal"})
@@ -194,7 +206,7 @@ advanced = true
 			ui.menu_ver1.menu2.filler.style.font_color = {r=48,g=75, b=74}
 			ui.menu_ver1.menu2.add({type="button", name="advancedbutton", caption="Advanced"})
 
-			if(help) then
+			if (help) then
 				ui.menu_ver1.add({type="label", name="help1", caption = "Use Midday to make brightly lit screenshots,"})
 				ui.menu_ver1.add({type="label", name="help2", caption = "then set the time to what it was before with Reset."})
 				ui.menu_ver1.help1.style.font_color = {r=1}
@@ -202,12 +214,12 @@ advanced = true
 			end
 
 			ui.menu_ver1.add({type="flow", name="menu3", direction = "horizontal"})
-			ui.menu_ver1.menu3.add({type="checkbox", name="maxzoomcheckbox1",state = false, caption = "Maximum zoom in"})
-			ui.menu_ver1.menu3.add({type="checkbox", name="maxzoomcheckbox2",state = false, caption = "Maximum zoom out (experimental)"})
+			ui.menu_ver1.menu3.add({type="checkbox", name="maxzoomcheckbox1", state = false, caption = "Maximum zoom in"})
+			ui.menu_ver1.menu3.add({type="checkbox", name="maxzoomcheckbox2", state = false, caption = "Maximum zoom out (experimental)"})
 			checkboxmaxzoom1 = game.players[player_index].gui.left.factoriomaps.menu_ver1.menu3.maxzoomcheckbox1
 			checkboxmaxzoom2 = ui.menu_ver1.menu3.maxzoomcheckbox2
 
-			if(help) then
+			if (help) then
 				ui.menu_ver1.add({type="label", name="help3", caption = "Max zoom in makes you zoom in one extra level."})
 				ui.menu_ver1.add({type="label", name="help4", caption = "Max zoom out makes you zoom out one extra level."})
 				ui.menu_ver1.add({type="label", name="help5", caption = "Extra zoom out may cause weird screen shots."})
@@ -217,7 +229,7 @@ advanced = true
 			end
 			ui.menu_ver1.add({type="flow", name="menu3a", direction = "horizontal"})
 			ui.menu_ver1.menu3a.add({type="checkbox", name="showalt",state=false, caption = "Show entity (Alt) info"})
-			if(help) then
+			if (help) then
 				ui.menu_ver1.add({type="label", name="help3a", caption = "Alt info shows the function of an assembly building."})
 				ui.menu_ver1.help3a.style.font_color = {r=1}
 			end
@@ -227,7 +239,7 @@ advanced = true
 			txtFolderName = ui.menu_ver1.menu4.foldername
 			ui.menu_ver1.menu4.add({type="button", name="generate", caption="Generate images"})
 
-			if(help) then
+			if (help) then
 				ui.menu_ver1.add({type="label", name="help6", caption = "Press the Generate button to start making the map."})
 				ui.menu_ver1.add({type="label", name="help7", caption = "The program will generate a folder name for you"})
 				ui.menu_ver1.help6.style.font_color = {r=1}
@@ -252,7 +264,7 @@ advanced = true
 		end
 
 
-	--if(ui.menu_ver2 == nil and advanced) then
+	--if (ui.menu_ver2 == nil and advanced) then
 
 		ui.add({type="frame", name="menu_ver2", direction="vertical"})
 
@@ -287,7 +299,7 @@ advanced = true
 		radiogridsize1 = game.players[player_index].gui.left.factoriomaps.menu_ver2.menu3a.gridsizecheckbox1
 		radiogridsize2 = game.players[player_index].gui.left.factoriomaps.menu_ver2.menu3a.gridsizecheckbox2
 		radiogridsize3 = game.players[player_index].gui.left.factoriomaps.menu_ver2.menu3a.gridsizecheckbox3
-		if(help) then
+		if (help) then
 			ui.menu_ver2.add({type="label", name="help8", caption = "For some people 1024 was lagging, try 256. Use 2048 at own risk."})
 			ui.menu_ver2.help8.style.font_color = {r=1}
 		end
@@ -296,7 +308,7 @@ advanced = true
 		ui.menu_ver2.menu4.add({type="checkbox", name="extensioncheckbox1",state = (extensionindex==1 and "true" or "false"), caption = ".jpg"})
 		ui.menu_ver2.menu4.add({type="checkbox", name="extensioncheckbox2",state = (extensionindex==2 and "true" or "false"), caption = ".png (only max zoom in)"})
 		ui.menu_ver2.menu4.add({type="checkbox", name="extensioncheckbox3",state = (extensionindex==3 and "true" or "false"), caption = ".png (all)"})
-		if(help) then
+		if (help) then
 			ui.menu_ver2.add({type="label", name="help9", caption = "Png gives better quality screenshots, but is (much) bigger in filesize."})
 			ui.menu_ver2.help9.style.font_color = {r=1}
 		end
