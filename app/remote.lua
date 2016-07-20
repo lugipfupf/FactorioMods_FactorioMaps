@@ -32,7 +32,7 @@ function interface.dereg()
 end
 
 function interface.old()
-    local ui = game.player.index.gui.left.factoriomaps;
+    local ui = game.player.gui.left.factoriomaps;
     if(ui == nil) then
         drawgui(1)
     else
