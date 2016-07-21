@@ -1,5 +1,8 @@
+
+fm.viewer = {};
+
 -- Taken with modification from YARM.
-function viewer(player, coords, goBack)
+function fm.viewer(player, coords, goBack)
     local player = game.players[player];
     local player_data = global.player_data[event.player_index];
     goBack = not not goBack;

@@ -31,3 +31,7 @@ end
 function string.contains(s, ends)
    return s and string.find(s, ends) ~= nil
 end
+
+function string.is_empty(s)
+  return s == nil or s == ''
+end
