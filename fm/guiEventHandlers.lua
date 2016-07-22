@@ -1,5 +1,7 @@
 
 if not fm.gui then error("Hey silly. don't include this directly!") end
+fm.gui.actions = {}; -- The actual even handlers
+fm.gui.radio = {}; -- The container for radio elements.
 
 function fm.gui.registerAllHandlers()
     Gui.on_click("FactorioMaps_mainButton", fm.gui.actions.MainButton)
@@ -26,6 +28,9 @@ function fm.gui.registerAllHandlers()
     Gui.on_text_changed("FactorioMaps_bottomRightY", fm.gui.actions.bottomRightY)
 end
 
+--Go ahead and register them now. There is no harm in it.
+fm.gui.registerAllHandlers()
+
 function fm.gui.updateCoords()
     for index, player in pairs(game.players) do
         if player.valid and player.connected then
@@ -39,7 +44,6 @@ function fm.gui.updateCoords()
     end
 end
 
-fm.gui.actions = {};
 
 --------------------------------
 -- MAIN WINDOW BUTTON
@@ -55,8 +59,6 @@ end
 --------------------------------
 -- RADIO BUTTON SIMULATOR!
 --------------------------------
-fm.gui.radio = {};
-
 function fm.gui.radio.selector(event)
     local function split(inputstr, seperator)
         if sep == nil then
@@ -108,12 +110,10 @@ end
 -- MAIN WINDOW LEFT PANE
 --------------------------------
 function fm.gui.actions.dayOnly(event)
-    Game.print_all("dayOnly is " .. tostring(event.state));
     global.config.dayOnly = event.state;
 end
 
 function fm.gui.actions.altInfo(event)
-    Game.print_all("altInfo is " .. tostring(event.state));
     global.config.altInfo = event.state;
 end
 
@@ -131,26 +131,21 @@ function fm.gui.actions.folderName(event)
     end
 
     global.config.folderName = event.text;
-    Game.print_all("Using folder name of [" .. event.text .. "]");
 end
 
 function fm.gui.actions.maxSize(event)
-    Game.print_all("Map set to whole world");
 end
 
 function fm.gui.actions.baseSize(event)
-    Game.print_all("Cropping map to base Size");
 end
 
 function fm.gui.actions.generate(event)
-    Game.print_all("Generating your map");
 end
 
 --------------------------------
 -- MAIN WINDOW RIGHT PANE (ADVANCED SETTINGS)
 --------------------------------
 function fm.gui.actions.customSize(event)
-    Game.print_all("customSize is " .. tostring(event.state));
     global.config.customSize = event.state;
 end
 
@@ -160,7 +155,6 @@ function fm.gui.actions.topLeftX(event)
     end
 
     global.config.topLeftX = event.text;
-    Game.print_all("Using topLeftX of [" .. event.text .. "]");
 end
 
 function fm.gui.actions.topLeftY(event)
@@ -169,7 +163,6 @@ function fm.gui.actions.topLeftY(event)
     end
 
     global.config.topLeftY = event.text;
-    Game.print_all("Using topLeftY of [" .. event.text .. "]");
 end
 
 function fm.gui.actions.bottomRightX(event)
@@ -178,7 +171,6 @@ function fm.gui.actions.bottomRightX(event)
     end
 
     global.config.bottomRightX = event.text;
-    Game.print_all("Using bottomRightX of [" .. event.text .. "]");
 end
 
 function fm.gui.actions.bottomRightY(event)
@@ -187,7 +179,6 @@ function fm.gui.actions.bottomRightY(event)
     end
 
     global.config.bottomRightY = event.text;
-    Game.print_all("Using bottomRightY of [" .. event.text .. "]");
 end
 
 function fm.gui.actions.mapQualityRadio(event)

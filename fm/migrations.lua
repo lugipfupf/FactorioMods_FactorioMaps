@@ -33,6 +33,6 @@ function fm.migrations.to_0_7_0()
         end
     end
 
-    fm.setupConfig();
+    global._radios = {};
     fm.gui.showAllMainButton();
 end

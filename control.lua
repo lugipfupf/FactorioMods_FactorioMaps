@@ -14,19 +14,13 @@ require "fm.config"
 --require "fm.generateIndex"
 --require "fm.generateMap"
 require "fm.gui"
---require "fm.helpers"
 require "fm.migrations"
 require "fm.remote"
 require "fm.viewer"
 
 script.on_init(function()
-    fm.setupConfig()
-    fm.gui.registerAllHandlers()
+    global._radios = {};
     fm.gui.showAllMainButton();
-end);
-
-script.on_load(function()
-    fm.gui.registerAllHandlers()
 end);
 
 script.on_configuration_changed(function (event)
