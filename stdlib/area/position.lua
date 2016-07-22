@@ -1,5 +1,5 @@
 --- Position module
--- @module position
+-- @module Position
 
 Position = {}
 
@@ -130,6 +130,16 @@ function Position.manhattan_distance(pos1, pos2)
     pos2 = Position.to_table(pos2)
 
     return math.abs(pos2.x - pos1.x) + math.abs(pos2.y - pos1.y)
+end
+
+--- Whether 2 positions are equal
+-- @param pos1 the first position
+-- @param pos2 the second position
+-- @return true if positions are equal
+function Position.equals(pos1, pos2)
+    pos1 = Position.to_table(pos1)
+    pos2 = Position.to_table(pos2)
+    return pos1.x == pos2.x and pos1.y == pos2.y
 end
 
 --- Converts a position in the array format to a position in the table format
