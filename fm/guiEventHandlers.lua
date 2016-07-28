@@ -9,8 +9,8 @@ function fm.gui.registerAllHandlers()
     Gui.on_click("FactorioMaps_maxSize", fm.gui.actions.maxSize)
     Gui.on_click("FactorioMaps_baseSize", fm.gui.actions.baseSize)
     Gui.on_click("FactorioMaps_generate", fm.gui.actions.generate)
-    Gui.on_click("FactorioMaps_topLeftView", fm.gui.actions.topLeftView)
     Gui.on_click("FactorioMaps_viewReturn", fm.gui.actions.viewReturn)
+    Gui.on_click("FactorioMaps_topLeftView", fm.gui.actions.topLeftView)
     Gui.on_click("FactorioMaps_topLeftPlayer", fm.gui.actions.topLeftPlayer)
     Gui.on_click("FactorioMaps_bottomRightView", fm.gui.actions.bottomRightView)
     Gui.on_click("FactorioMaps_bottomRightPlayer", fm.gui.actions.bottomRightPlayer)
@@ -27,9 +27,6 @@ function fm.gui.registerAllHandlers()
     Gui.on_text_changed("FactorioMaps_bottomRightX", fm.gui.actions.bottomRightX)
     Gui.on_text_changed("FactorioMaps_bottomRightY", fm.gui.actions.bottomRightY)
 end
-
---Go ahead and register them now. There is no harm in it.
-fm.gui.registerAllHandlers()
 
 function fm.gui.updateCoords()
     for index, player in pairs(game.players) do
@@ -110,11 +107,11 @@ end
 -- MAIN WINDOW LEFT PANE
 --------------------------------
 function fm.gui.actions.dayOnly(event)
-    global.config.dayOnly = event.state;
+    fm.cfg.set("dayOnly", event.state);
 end
 
 function fm.gui.actions.altInfo(event)
-    global.config.altInfo = event.state;
+    fm.cfg.set("altInfo", event.state);
 end
 
 function fm.gui.actions.advancedButton(event)
@@ -130,7 +127,7 @@ function fm.gui.actions.folderName(event)
         return;
     end
 
-    global.config.folderName = event.text;
+    fm.cfg.set("folderName", event.text);
 end
 
 function fm.gui.actions.maxSize(event)
@@ -146,7 +143,7 @@ end
 -- MAIN WINDOW RIGHT PANE (ADVANCED SETTINGS)
 --------------------------------
 function fm.gui.actions.customSize(event)
-    global.config.customSize = event.state;
+    fm.cfg.set("customSize", event.state);
 end
 
 function fm.gui.actions.topLeftX(event)
@@ -154,7 +151,7 @@ function fm.gui.actions.topLeftX(event)
         return;
     end
 
-    global.config.topLeftX = event.text;
+    fm.cfg.set("topLeftX", event.text);
 end
 
 function fm.gui.actions.topLeftY(event)
@@ -162,7 +159,7 @@ function fm.gui.actions.topLeftY(event)
         return;
     end
 
-    global.config.topLeftY = event.text;
+    fm.cfg.set("topLeftY", event.text);
 end
 
 function fm.gui.actions.bottomRightX(event)
@@ -170,7 +167,7 @@ function fm.gui.actions.bottomRightX(event)
         return;
     end
 
-    global.config.bottomRightX = event.text;
+    fm.cfg.set("bottomRightX", event.text);
 end
 
 function fm.gui.actions.bottomRightY(event)
@@ -178,35 +175,60 @@ function fm.gui.actions.bottomRightY(event)
         return;
     end
 
-    global.config.bottomRightY = event.text;
+    fm.cfg.set("bottomRightY", event.text);
 end
 
 function fm.gui.actions.mapQualityRadio(event)
     local num = fm.gui.radio.selector(event)
-    global.config.mapQuality = num;
+    fm.cfg.set("mapQuality", num);
 end
 
 function fm.gui.actions.extensionRadio(event)
     local num = fm.gui.radio.selector(event)
-    global.config.extension = num;
+    fm.cfg.set("extension", num);
 end
 
 function fm.gui.actions.viewReturn(event)
-    Game.print_all("Using viewReturn clicked");
+    fm.viewer(event, {x=fm.cfg.get("topLeftX"), y=fm.cfg.get("topLeftY")}, true)
 end
 
 function fm.gui.actions.topLeftView(event)
-    Game.print_all("Using topLeftView clicked");
+    fm.viewer(event, {x=fm.cfg.get("topLeftX"), y=fm.cfg.get("topLeftY")})
 end
 
 function fm.gui.actions.topLeftPlayer(event)
     Game.print_all("Using topLeftPlayer clicked");
+    local player = game.players[event.player_index]
+    local x = math.floor(player.position.x)
+    local y = math.floor(player.position.y)
+    fm.cfg.set("topLeftX", x)
+    fm.cfg.set("topLeftY", y)
+
+    local rightPane = fm.gui.getRightPane(player.index)
+    if rightPane then
+        rightPane.topFlow.FactorioMaps_topLeftX.text = x
+        rightPane.topFlow.FactorioMaps_topLeftY.text = y
+    end
 end
 
 function fm.gui.actions.bottomRightView(event)
-    Game.print_all("Using bottomRightView clicked");
+    fm.viewer(event, {x=fm.cfg.get("bottomRightX"), y=fm.cfg.get("bottomRightY")})
 end
 
 function fm.gui.actions.bottomRightPlayer(event)
     Game.print_all("Using bottomRightPlayer clicked");
+    local player = game.players[event.player_index]
+    local x = math.floor(player.position.x)
+    local y = math.floor(player.position.y)
+    fm.cfg.set("bottomRightX", x)
+    fm.cfg.set("bottomRightY", y)
+
+    local rightPane = fm.gui.getRightPane(player.index)
+    if rightPane then
+        rightPane.topFlow.FactorioMaps_bottomRightX.text = x
+        rightPane.topFlow.FactorioMaps_bottomRightY.text = y
+    end
 end
+
+--Go ahead and register them now. There is no harm in it.
+fm.gui.registerAllHandlers()

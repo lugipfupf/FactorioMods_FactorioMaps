@@ -1,20 +1,23 @@
 
-function fm.setupConfig()
-    global.config = {};
-    global.config.dayOnly = true;
-    global.config.altInfo = false;
-    global.config.folderName = "TempNameChangeMe!";
-    global.config.customSize = false;
-    global.config.topLeftX = -1000;
-    global.config.topLeftY = -1000;
-    global.config.bottomRightX = 1000;
-    global.config.bottomRightY = 1000;
-    global.config.mapQuality = 3; -- Medium
-    global.config.extension = 1; -- jpg
+fm.config = {}
 
-    --Special holders for player data
-    global._players = {};
+local config_defaults = {
+    dayOnly = true,
+    altInfo = false,
+    folderName = "TempNameChangeMe!",
+    customSize = false,
+    topLeftX = -1000,
+    topLeftY = -1000,
+    bottomRightX = 1000,
+    bottomRightY = 1000,
+    mapQuality = 3, -- Medium
+    extension = 1 -- jpg
+}
 
-    --Special holders for the radio elements.
-    global._radios = {};
+function fm.config.applyDefaults(forced)
+    for key, value in pairs(config_defaults) do
+        if not fm.cfg.is_set(key) or not not forced then
+            fm.cfg.set(key, value);
+        end
+    end
 end

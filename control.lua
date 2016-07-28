@@ -1,14 +1,15 @@
 
 --Include needed stdlib libs.
-require "stdlib.core"
-require "stdlib.entity.entity"
-require "stdlib.game"
-require "stdlib.gui.gui"
-require "stdlib.log.logger"
-require "stdlib.string"
+require "stdlib/config/config"
+require "stdlib/core"
+require "stdlib/entity/entity"
+require "stdlib/game"
+require "stdlib/gui/gui"
+require "stdlib/log/logger"
+require "stdlib/string"
 
 fm = {}
-fm.log = Logger.new("fm","debug",true);
+fm.log = Logger.new("FactorioMaps", "debug", true);
 
 require "fm.config"
 --require "fm.generateIndex"
@@ -20,12 +21,29 @@ require "fm.viewer"
 
 script.on_init(function()
     global._radios = {};
-    fm.gui.showAllMainButton();
+    global.config = {};
+    fm.cfg = Config.new( global.config );
+    fm.config.applyDefaults()
+end);
+
+script.on_load(function()
+    --[[
+        The damn global table is plain annoying to work with.
+        modification to the global table from the global scope works but will NOT
+          saved to the game save file.
+        Any modifications here causes Factorio to blow up as of 0.13.5
+
+        So in conclusion never touch this line.
+        Gotta catch the migrations properly.
+    ]]--
+    if global.config then
+        fm.cfg = Config.new( global.config );
+    end
 end);
 
 script.on_configuration_changed(function (event)
     for modName,modTable in pairs(event.mod_changes) do
-        if modName == MOD_FULLNAME then
+        if modName == "FactorioMaps" then
             fm.migrations.doUpdate(modTable.old_version, modTable.new_version);
         end
     end

@@ -2,8 +2,12 @@
 fm.viewer = {};
 
 -- Taken with modification from YARM.
-function fm.viewer(player, coords, goBack)
-    local player = game.players[player];
+function fm.viewer(event, coords, goBack)
+    if not global.player_data[event.player_index] then
+        global.player_data[event.player_index] = {}
+    end
+
+    local player = game.players[event.player_index];
     local player_data = global.player_data[event.player_index];
     goBack = not not goBack;
 
@@ -30,7 +34,7 @@ function fm.viewer(player, coords, goBack)
     elseif (player_data.viewing and not goBack) then
         -- Moving our viewer somewhere else. Take a shortcut and just teleport it. :p
         player_data.remote_viewer.teleport(coords);
-    elseif (not player_data.viewing and not goBack) then 
+    elseif not player_data.viewing and not goBack then
         -- stepping out to a remote viewer: first, be sure you remember your old body
         if not player_data.real_character or not player_data.real_character.valid then
             -- Abort if the "real" character is missing (e.g., god mode) or isn't a player!

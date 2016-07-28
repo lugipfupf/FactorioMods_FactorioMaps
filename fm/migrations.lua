@@ -33,6 +33,12 @@ function fm.migrations.to_0_7_0()
         end
     end
 
+    global.config = {};
     global._radios = {};
+    global.player_data = {};
+
+    --Since this is a migrated to 0.7.0 save we need to make fm.cfg since on_load couldn't
+    fm.cfg = Config.new(global.config);
+    fm.config.applyDefaults(true);
     fm.gui.showAllMainButton();
 end
