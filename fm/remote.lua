@@ -1,5 +1,5 @@
 
-fm.remote = {};
+fm.remote = {}
 
 function fm.remote.reset_player(player_name_or_index)
     local player = game.players[player_name_or_index]
@@ -14,7 +14,7 @@ end
 --Testing migrations.
 --TODO: DELETE ME
 function fm.remote.migrate()
-    fm.migrations.to_0_7_0();
+    fm.migrations.to_0_7_0()
 end
 
 remote.add_interface("fm", fm.remote)

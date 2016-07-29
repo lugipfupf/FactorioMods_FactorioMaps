@@ -17,7 +17,7 @@ local config_defaults = {
 function fm.config.applyDefaults(forced)
     for key, value in pairs(config_defaults) do
         if not fm.cfg.is_set(key) or not not forced then
-            fm.cfg.set(key, value);
+            fm.cfg.set(key, value)
         end
     end
 end

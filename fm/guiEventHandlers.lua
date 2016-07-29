@@ -1,7 +1,7 @@
 
 if not fm.gui then error("Hey silly. don't include this directly!") end
-fm.gui.actions = {}; -- The actual even handlers
-fm.gui.radio = {}; -- The container for radio elements.
+fm.gui.actions = {} -- The actual even handlers
+fm.gui.radio = {} -- The container for radio elements.
 
 function fm.gui.registerAllHandlers()
     Gui.on_click("FactorioMaps_mainButton", fm.gui.actions.MainButton)
@@ -31,11 +31,11 @@ end
 function fm.gui.updateCoords()
     for index, player in pairs(game.players) do
         if player.valid and player.connected then
-            local rightPane = fm.gui.getRightPane(player.index);
+            local rightPane = fm.gui.getRightPane(player.index)
             if (rightPane and rightPane.label_currentPlayerCoords) then
-                local x = math.floor(player.position.x);
-                local y = math.floor(player.position.y);
-                rightPane.label_currentPlayerCoords.caption = {"label-current-player-coords", player.surface.name, x, y};
+                local x = math.floor(player.position.x)
+                local y = math.floor(player.position.y)
+                rightPane.label_currentPlayerCoords.caption = {"label-current-player-coords", player.surface.name, x, y}
             end
         end
     end
@@ -47,9 +47,9 @@ end
 --------------------------------
 function fm.gui.actions.MainButton(event)
     if (fm.gui.getMainWindow(event.player_index)) then
-        fm.gui.hideMainWindow(event.player_index);
+        fm.gui.hideMainWindow(event.player_index)
     else
-        fm.gui.showMainWindow(event.player_index);
+        fm.gui.showMainWindow(event.player_index)
     end
 end
 
@@ -59,38 +59,38 @@ end
 function fm.gui.radio.selector(event)
     local function split(inputstr, seperator)
         if sep == nil then
-                sep = "%s";
+                sep = "%s"
         end
-        local t={} ;
-        local i=1;
+        local t={}
+        local i=1
         for str in string.gmatch(inputstr, "([^" .. seperator .. "]+)") do
-                t[i] = str;
-                i = i + 1;
+                t[i] = str
+                i = i + 1
         end
-        return t;
+        return t
     end
-    local tmp = split(event.element.name, "_");
-    local radio = tmp[#tmp-1];
-    local number = tonumber(tmp[#tmp]);
+    local tmp = split(event.element.name, "_")
+    local radio = tmp[#tmp-1]
+    local number = tonumber(tmp[#tmp])
 
     for index, element in pairs(global._radios[radio]) do
         if (element.valid) then
             if (index == number) then
-                element.state = true;
+                element.state = true
             else
-                element.state = false;
+                element.state = false
             end
         else
-            global._radios[radio][index] = nil;
+            global._radios[radio][index] = nil
         end
     end
-    return number;
+    return number
 end
 
 function fm.gui.radio.mapQualitySelect(thisOne)
     for index, element in pairs(global._radios.mapQuality) do
         if (index == thisOne) then
-            fm.gui.radio.selector({element = element});
+            fm.gui.radio.selector({element = element})
         end
     end
 end
@@ -98,7 +98,7 @@ end
 function fm.gui.radio.extensionSelect(thisOne)
     for index, element in pairs(global._radios.extension) do
         if (index == thisOne) then
-            fm.gui.radio.selector({element = element});
+            fm.gui.radio.selector({element = element})
         end
     end
 end
@@ -107,85 +107,125 @@ end
 -- MAIN WINDOW LEFT PANE
 --------------------------------
 function fm.gui.actions.dayOnly(event)
-    fm.cfg.set("dayOnly", event.state);
+    fm.cfg.set("dayOnly", event.state)
 end
 
 function fm.gui.actions.altInfo(event)
-    fm.cfg.set("altInfo", event.state);
+    fm.cfg.set("altInfo", event.state)
 end
 
 function fm.gui.actions.advancedButton(event)
     if (fm.gui.getRightPane(event.player_index)) then
-        fm.gui.hideRightPane(event.player_index);
+        fm.gui.hideRightPane(event.player_index)
     else
-        fm.gui.showRightPane(event.player_index);
+        fm.gui.showRightPane(event.player_index)
     end
 end
 
 function fm.gui.actions.folderName(event)
     if string.is_empty(event.text) then
-        return;
+        return
     end
 
-    fm.cfg.set("folderName", event.text);
+    fm.cfg.set("folderName", event.text)
 end
 
 function fm.gui.actions.maxSize(event)
+    local player = game.players[event.player_index]
+    local minX, minY, maxX, maxY = helpers.maxSize(event.player_index)
+
+    if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
+        fm.cfg.set("topLeftX", minX)
+        fm.cfg.set("topLeftY", minY)
+        fm.cfg.set("bottomRightX", maxX)
+        fm.cfg.set("bottomRightY", maxY)
+        local rightPane = fm.gui.getRightPane(player.index)
+        if rightPane then
+            rightPane.topFlow.FactorioMaps_topLeftX.text = minX
+            rightPane.topFlow.FactorioMaps_topLeftY.text = minY
+            rightPane.topFlow.FactorioMaps_bottomRightX.text = maxX
+            rightPane.topFlow.FactorioMaps_bottomRightY.text = maxY
+        end
+    else
+        player.print("Something went very very wrong...")
+    end
 end
 
 function fm.gui.actions.baseSize(event)
+    local player = game.players[event.player_index]
+    local minX, minY, maxX, maxY = helpers.cropToBase(event.player_index)
+
+    if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
+        fm.cfg.set("topLeftX", minX)
+        fm.cfg.set("topLeftY", minY)
+        fm.cfg.set("bottomRightX", maxX)
+        fm.cfg.set("bottomRightY", maxY)
+        local rightPane = fm.gui.getRightPane(player.index)
+        if rightPane then
+            rightPane.topFlow.FactorioMaps_topLeftX.text = minX
+            rightPane.topFlow.FactorioMaps_topLeftY.text = minY
+            rightPane.topFlow.FactorioMaps_bottomRightX.text = maxX
+            rightPane.topFlow.FactorioMaps_bottomRightY.text = maxY
+        end
+    else
+        player.print("Either you haven't built anything yet, or there is something very wrong )")
+    end
 end
 
 function fm.gui.actions.generate(event)
+    local player = game.players[event.player_index]
+    local data = {}
+
+--    fm.generateMap(player, data)
 end
 
 --------------------------------
 -- MAIN WINDOW RIGHT PANE (ADVANCED SETTINGS)
 --------------------------------
 function fm.gui.actions.customSize(event)
-    fm.cfg.set("customSize", event.state);
+    fm.cfg.set("customSize", event.state)
 end
 
 function fm.gui.actions.topLeftX(event)
     if string.is_empty(event.text) then
-        return;
+        return
     end
 
-    fm.cfg.set("topLeftX", event.text);
+    fm.cfg.set("topLeftX", event.text)
 end
 
 function fm.gui.actions.topLeftY(event)
     if string.is_empty(event.text) then
-        return;
+        return
     end
 
-    fm.cfg.set("topLeftY", event.text);
+    fm.cfg.set("topLeftY", event.text)
 end
 
 function fm.gui.actions.bottomRightX(event)
     if string.is_empty(event.text) then
-        return;
+        return
     end
 
-    fm.cfg.set("bottomRightX", event.text);
+    fm.cfg.set("bottomRightX", event.text)
 end
 
 function fm.gui.actions.bottomRightY(event)
     if string.is_empty(event.text) then
-        return;
+        return
     end
 
-    fm.cfg.set("bottomRightY", event.text);
+    fm.cfg.set("bottomRightY", event.text)
 end
 
 function fm.gui.actions.mapQualityRadio(event)
     local num = fm.gui.radio.selector(event)
-    fm.cfg.set("mapQuality", num);
+    fm.cfg.set("mapQuality", num)
 end
 
 function fm.gui.actions.extensionRadio(event)
     local num = fm.gui.radio.selector(event)
-    fm.cfg.set("extension", num);
+    fm.cfg.set("extension", num)
 end
 
 function fm.gui.actions.viewReturn(event)
@@ -197,7 +237,7 @@ function fm.gui.actions.topLeftView(event)
 end
 
 function fm.gui.actions.topLeftPlayer(event)
-    Game.print_all("Using topLeftPlayer clicked");
+    Game.print_all("Using topLeftPlayer clicked")
     local player = game.players[event.player_index]
     local x = math.floor(player.position.x)
     local y = math.floor(player.position.y)
@@ -216,7 +256,7 @@ function fm.gui.actions.bottomRightView(event)
 end
 
 function fm.gui.actions.bottomRightPlayer(event)
-    Game.print_all("Using bottomRightPlayer clicked");
+    Game.print_all("Using bottomRightPlayer clicked")
     local player = game.players[event.player_index]
     local x = math.floor(player.position.x)
     local y = math.floor(player.position.y)
