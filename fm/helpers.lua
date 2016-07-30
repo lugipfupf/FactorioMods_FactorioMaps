@@ -3,8 +3,7 @@ require "stdlib/area/chunk"
 
 fm.helpers = {}
 
-
-function fp.helpers.maxSize(player_name_or_index)
+function fm.helpers.maxSize(player_name_or_index)
     local player = game.players[player_name_or_index]
     local minX = 0
     local minY = 0
@@ -13,11 +12,11 @@ function fp.helpers.maxSize(player_name_or_index)
 
     for chunk in player.surface.get_chunks() do
         if(player.force.is_chunk_charted(player.surface,{chunk.x,chunk.y})) then -- if explored by player
-            minX = helpers.getMin(minX, chunk.x)
-            minY = helpers.getMin(minY, chunk.y)
+            minX = fm.helpers.getMin(minX, chunk.x)
+            minY = fm.helpers.getMin(minY, chunk.y)
 
-            maxX = helpers.getMax(maxx, chunk.x)
-            maxY = helpers.getMax(maxY, chunk.y)
+            maxX = fm.helpers.getMax(maxx, chunk.x)
+            maxY = fm.helpers.getMax(maxY, chunk.y)
         end
     end
 
@@ -47,22 +46,23 @@ function fm.helpers.cropToBase(player_name_or_index)
 			local entities = player.surface.count_entities_filtered(entityFilter)
 			local players = player.surface.count_entities_filtered(playerFilter)
             if (entities - players > 0) then
-                minX = helpers.getMin(minX, chunk.x)
-                minY = helpers.getMin(minY, chunk.y)
+                local tmpChunk = Chunk.to_area(chunk)
+                minX = fm.helpers.getMin(minX, tmpChunk.left_top.x)
+                minY = fm.helpers.getMin(minY, tmpChunk.left_top.y)
 
-                maxX = helpers.getMax(maxx, chunk.x)
-                maxY = helpers.getMax(maxY, chunk.y)
+                maxX = fm.helpers.getMax(maxX, tmpChunk.right_bottom.x)
+                maxY = fm.helpers.getMax(maxY, tmpChunk.right_bottom.y)
             end
 		end
 
 	end
 
 	if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
-		--Turn chunk x/y pos in to position x/y then add a chunk for good measure.
-		minX = minX * 32 + 32
-		minY = minY * 32 + 32
-		maxX = maxX * 32 + 32
-		maxY = maxY * 32 + 32
+		--Turn chunk x/y pos in to position x/y then adds two chunks to each for good measure.
+		minX = minX - 64
+		minY = minY - 64
+		maxX = maxX + 64
+		maxY = maxY + 64
 
         return minX, minY, maxX, maxY
 	end
