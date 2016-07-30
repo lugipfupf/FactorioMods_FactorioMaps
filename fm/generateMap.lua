@@ -1,98 +1,68 @@
+
+require "stdlib/area/area"
+
 function fm.generateMap(data)
-	playerposition = game.players[player_index].position
-	ingameresolution = 0 -- default
-
-	local squaresize = gridpixelarray[gridsizeindex]
-	local ingametotalwidth = math.ceil(math.abs(txtTopLeftX.text) + math.abs(txtBottomRightX.text))
-	local ingametotalheight = math.ceil(math.abs(txtTopLeftY.text) + math.abs(txtBottomRightY.text))
-	local numberofhorizontalscreenshots = math.ceil(ingametotalwidth/squaresize)
-	local numberofverticalscreenshots =  math.ceil(ingametotalheight/squaresize)
-	local zooming = 1 -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
-
 	-- delete folder (if it already exists)
-	game.remove_path("FactorioMaps/" .. txtFolderName.text)
+    local basePath = "FactorioMaps/" .. data.folderName
+	game.remove_path(basePath)
 
-	-- calculate min/max zoom levels
-	--
-	minzoom = 0 -- lvl 0 is always 256x256, the resolution in which google maps calculates positions
-	maxzoom = 0 -- default
+	local inGameTotalWidth = math.ceil(math.abs(data.topLeft.x) + math.abs(data.bottomRight.x))
+	local inGameTotalHeight = math.ceil(math.abs(data.topLeft.y) + math.abs(data.bottomRight.y))
+    local inGameCenter = Area.center({data.topLeft, data.bottomRight})
 
-	local resolutionarray = {8,16,32,64,128,256,512,1024,2048,4096,8192} -- resolution for each zoom level, lvl 0 is always 8x8 (256x256 pixels)
+    local gridSizes = {256, 512, 1024, 2048}
+	local gridSize = gridSizes[data.gridSize]
 
-	local maxcounter = 0 -- in google maps, max zoom out level is 0, so start with 0
-	for _,res in pairs(resolutionarray) do
-		if(ingametotalwidth < res and ingametotalheight < res) then
-			maxzoom = maxcounter
-			ingameresolution = res
-			center = toLatLng(res, {x=ingametotalwidth/2, y=ingametotalheight/2})
+    local gridPixelSizes = {8, 16, 32, 64}
+    local gridPixelSize = gridPixelSizes[data.gridSize]
+
+	local NumHScreenshots = math.ceil(inGameTotalWidth / gridPixelSize)
+	local NumVScreenshots =  math.ceil(inGameTotalHeight / gridPixelSize)
+
+	local currentZoomLevel = 1 -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
+	local minZoomLevel = data.gridSize - 1
+	local maxZoomLevel = 0 -- default
+
+	local resolutionArray = {8,16,32,64,128,256,512,1024,2048,4096,8192} -- resolution for each zoom level, lvl 0 is always 8x8 (256x256 pixels)
+
+	local tmpCounter = 0 -- in google maps, max zoom out level is 0, so start with 0
+	for _,resolution in pairs(resolutionArray) do
+		if(inGameTotalWidth < resolution and inGameTotalHeight < resolution) then
+			maxZoomLevel = tmpCounter
 			break
 		end
-		maxcounter = maxcounter + 1
+		tmpCounter = tmpCounter + 1
 	end
 
-	local latlng = toLatLng(ingameresolution,{x=ingametotalwidth,y=ingametotalheight})
-	linesarray =
-	{
-		{lat = 84.5, lng = -179}, -- start top left
-		{lat = 84.5, lng = -50}, -- lng = latlng.lng/2}, -- intermediate point, so the line won't "flip"
-		{lat = 84.5, lng = latlng.lng},
-		{lat = latlng.lat, lng = latlng.lng},
-		{lat = latlng.lat, lng =  -50},
-		{lat = latlng.lat, lng = -179},
-		{lat = 84.5, lng = -179} -- start top left
-	}
-	if gridsizeindex == 1 then
-		minzoom = 0
-	elseif gridsizeindex == 2 then
-		minzoom = 2
-	elseif gridsizeindex == 3 then
-		minzoom = 3
-	end
+    if maxZoomLevel < minZoomLevel then maxZoomLevel = minZoomLevel end
 
-	if(extrazoomin == false) then -- if (no max level zoom in), skip this step
-		maxzoom = maxzoom - 1
-		zooming = zooming / 2 -- startzoom
-		numberofhorizontalscreenshots = math.ceil(numberofhorizontalscreenshots/2)
-		numberofverticalscreenshots = math.ceil(numberofverticalscreenshots/2)
-	elseif(z==minzoom and extrazoomout == false) then -- if (no extra zoom out), skip this step
-		-- debug: if minzoom < smallest zoomlevel possible, skip the step before the minzoom level
-		minzoom = minzoom + 1
-	end
+    local screenshotTopLeftX = 0
+    local screenshotTopLeftY = 0
 
-	--debug: fails for very small maps where maxzoom < minzoom
-	for z=maxzoom,minzoom,-1 do  -- max and min zoomlevels
-		for y=0,numberofverticalscreenshots-1 do
-
-
-			for x=0,numberofhorizontalscreenshots-1 do
-				if((extensionindex==2 and z==maxzoom) or extensionindex==3) then
+    --Temp variables used in loops
+    local extension = ""
+    local pathText = ""
+    local positionText = ""
+    local resolutionText = ""
+	for z = maxZoomLevel, minZoomLevel, -1 do  -- max and min zoomlevels
+        --Align the center of each zoom level to base center
+        screenshotTopLeftX = inGameCenter.x - math.floor(NumHScreenshots * gridPixelSize / 2 / currentZoomLevel)
+        screenshotTopLeftY = inGameCenter.y - math.floor(NumVScreenshots * gridPixelSize / 2 / currentZoomLevel)
+		for y = 0, NumVScreenshots-1 do
+			for x = 0, NumHScreenshots - 1 do
+				if((data.extension == 2 and z == maxZoomLevel) or data.extension == 3) then
 					extension = "png"
 				else
 					extension = "jpg"
 				end
-				local positiontext = {txtTopLeftX.text + (1/(2*zooming))*squaresize + x*(1/zooming)*squaresize, txtTopLeftY.text + (1/(2*zooming))*squaresize + y*(1/zooming)*squaresize}
-				local resolutiontext = {gridsizearray[gridsizeindex],gridsizearray[gridsizeindex]}
-				local pathtext = "FactorioMaps/".. txtFolderName.text .. "/Images/".. z .."_".. x .."_".. y ..".".. extension
-				game.take_screenshot({position=positiontext, resolution=resolutiontext, zoom=zooming, path= pathtext, show_entity_info=showalt})
+				positionTable = {screenshotTopLeftX + (1 / (2 * currentZoomLevel)) * gridPixelSize + x * (1 / currentZoomLevel) * gridPixelSize, screenshotTopLeftY + (1 / (2 * currentZoomLevel)) * gridPixelSize + y * (1 / currentZoomLevel) * gridPixelSize}
+				pathText = basePath .. "/Images/" .. z .. "_" .. x .. "_" .. y .. "." .. extension
+                game.take_screenshot({position = positionTable, resolution = {gridSize, gridSize}, zoom = currentZoomLevel, path = pathText, show_entity_info = data.altInfo})
 			end
 		end
 
-		zooming = zooming/2
-		if gridsizeindex == 1 and zooming < 1/256 then
-			game.players[player_index].print("max level zoom break")
-			minzoom = z
-			break
-		elseif gridsizeindex == 2 and zooming < 1/64 then
-			game.players[player_index].print("max level zoom break")
-			minzoom = z
-			break
-		elseif gridsizeindex == 3 and zooming < 1/32 then
-			game.players[player_index].print("max level zoom break")
-			minzoom = z
-			break
-		end
-
-		numberofhorizontalscreenshots = math.ceil(numberofhorizontalscreenshots/2)
-		numberofverticalscreenshots = math.ceil(numberofverticalscreenshots/2)
+		currentZoomLevel = currentZoomLevel / 2
+		NumHScreenshots = math.ceil(NumHScreenshots / 2)
+		NumVScreenshots = math.ceil(NumVScreenshots / 2)
 	end
 end
