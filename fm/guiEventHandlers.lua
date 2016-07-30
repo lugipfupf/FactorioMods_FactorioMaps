@@ -17,8 +17,7 @@ function fm.gui.registerAllHandlers()
 
     Gui.on_checked_state_changed("FactorioMaps_dayOnly", fm.gui.actions.dayOnly)
     Gui.on_checked_state_changed("FactorioMaps_altInfo", fm.gui.actions.altInfo)
-    Gui.on_checked_state_changed("FactorioMaps_customSize", fm.gui.actions.customSize)
-    Gui.on_checked_state_changed("FactorioMaps_radio_mapQuality_", fm.gui.actions.mapQualityRadio)
+    Gui.on_checked_state_changed("FactorioMaps_radio_gridSize_", fm.gui.actions.gridSizeRadio)
     Gui.on_checked_state_changed("FactorioMaps_radio_extension_", fm.gui.actions.extensionRadio)
 
     Gui.on_text_changed("FactorioMaps_folderName", fm.gui.actions.folderName)
@@ -69,7 +68,7 @@ function fm.gui.radio.selector(event)
         end
         return t
     end
-    local tmp = split(event.element.name, "_")
+    local tmp = string.split(event.element.name, "_")
     local radio = tmp[#tmp-1]
     local number = tonumber(tmp[#tmp])
 
@@ -87,20 +86,26 @@ function fm.gui.radio.selector(event)
     return number
 end
 
-function fm.gui.radio.mapQualitySelect(thisOne)
-    for index, element in pairs(global._radios.mapQuality) do
+function fm.gui.radio.gridSizeSelect(thisOne)
+    for index, element in pairs(global._radios.gridSize) do
         if (index == thisOne) then
             fm.gui.radio.selector({element = element})
+            return
         end
     end
+
+    fm.gui.radio.selector({element = global._radios.gridSize[1]})
 end
 
 function fm.gui.radio.extensionSelect(thisOne)
     for index, element in pairs(global._radios.extension) do
         if (index == thisOne) then
             fm.gui.radio.selector({element = element})
+            return
         end
     end
+
+    fm.gui.radio.selector({element = global._radios.extension[1]})
 end
 
 --------------------------------
@@ -132,7 +137,7 @@ end
 
 function fm.gui.actions.maxSize(event)
     local player = game.players[event.player_index]
-    local minX, minY, maxX, maxY = helpers.maxSize(event.player_index)
+    local minX, minY, maxX, maxY = fm.helpers.maxSize(event.player_index)
 
     if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
         fm.cfg.set("topLeftX", minX)
@@ -153,7 +158,7 @@ end
 
 function fm.gui.actions.baseSize(event)
     local player = game.players[event.player_index]
-    local minX, minY, maxX, maxY = helpers.cropToBase(event.player_index)
+    local minX, minY, maxX, maxY = fm.helpers.cropToBase(event.player_index)
 
     if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
         fm.cfg.set("topLeftX", minX)
@@ -176,16 +181,29 @@ function fm.gui.actions.generate(event)
     local player = game.players[event.player_index]
     local data = {}
 
---    fm.generateMap(player, data)
+    data.topLeft = {
+        x = fm.cfg.get("topLeftX"),
+        y = fm.cfg.get("topLeftY")
+    }
+
+    data.bottomRight = {
+        x = fm.cfg.get("bottomRightX"),
+        y = fm.cfg.get("bottomRightY")
+    }
+
+    data.folderName = fm.cfg.get("folderName")
+    data.gridSize = fm.cfg.get("gridSize")
+    data.extension = fm.cfg.get("extension")
+    data.dayOnly = fm.cfg.get("dayOnly")
+    data.altInfo = fm.cfg.get("altInfo")
+    --data. = fm.cfg.get("")
+
+    fm.generateMap(player, data)
 end
 
 --------------------------------
 -- MAIN WINDOW RIGHT PANE (ADVANCED SETTINGS)
 --------------------------------
-function fm.gui.actions.customSize(event)
-    fm.cfg.set("customSize", event.state)
-end
-
 function fm.gui.actions.topLeftX(event)
     if string.is_empty(event.text) then
         return
@@ -218,9 +236,9 @@ function fm.gui.actions.bottomRightY(event)
     fm.cfg.set("bottomRightY", event.text)
 end
 
-function fm.gui.actions.mapQualityRadio(event)
+function fm.gui.actions.gridSizeRadio(event)
     local num = fm.gui.radio.selector(event)
-    fm.cfg.set("mapQuality", num)
+    fm.cfg.set("gridSize", num)
 end
 
 function fm.gui.actions.extensionRadio(event)

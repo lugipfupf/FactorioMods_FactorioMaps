@@ -10,7 +10,7 @@ local config_defaults = {
     topLeftY = -1000,
     bottomRightX = 1000,
     bottomRightY = 1000,
-    mapQuality = 3, -- Medium
+    gridSize = 3, -- Medium
     extension = 1 -- jpg
 }
 

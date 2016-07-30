@@ -51,7 +51,7 @@ function fm.gui.getMainWindow(player_index_or_name)
     end
     return nil
 end
-    
+
 function fm.gui.showMainWindow(player_index_or_name)
     local player = game.players[player_index_or_name]
     if (not player or not player.valid or not player.connected) then
@@ -82,7 +82,7 @@ function fm.gui.getLeftPane(player_index_or_name)
     end
     return nil
 end
-    
+
 function fm.gui.showLeftPane(player_index_or_name)
     if (not fm.gui.getMainWindow(player_index_or_name)) then
         fm.gui.showMainWindow(player_index_or_name)
@@ -136,7 +136,7 @@ function fm.gui.getRightPane(player_index_or_name)
     end
     return nil
 end
-    
+
 function fm.gui.showRightPane(player_index_or_name)
     if (fm.gui.getRightPane(player_index_or_name)) then
         return
@@ -147,8 +147,6 @@ function fm.gui.showRightPane(player_index_or_name)
     local mainWindow = fm.gui.getMainWindow(player_index_or_name)
 
     local rightPane = mainWindow.add({type = "frame", name = "Right", caption = {"label-advanced-settings"}, direction = "vertical"})
-    rightPane.add({type = "checkbox", name = "FactorioMaps_customSize", state = fm.cfg.get("customSize"), caption = {"label-custom-size"}, tooltip = {"tooltip-custom-size"}})
-
     local tbl = rightPane.add({type = "table", name = "topFlow", colspan = 5})
     tbl.add({type = "label"})
     tbl.add({type = "label"})
@@ -179,14 +177,14 @@ function fm.gui.showRightPane(player_index_or_name)
     tbl.add({type = "sprite-button", name = "FactorioMaps_bottomRightPlayer", sprite = "FactorioMaps_player_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-bottom-right-player"}})
 
     local middleFlow2 = rightPane.add({type = "flow", name = "middleFlow2", direction = "horizontal"})
-    middleFlow2.add({type = "label", name = "label_mapQuality", caption = {"label-map-quality"}, tooltip = {"tooltip-map-quality"}})
-    local tbl = middleFlow2.add({type = "table", name = "table_mapQuality", colspan = 1})
-    global._radios.mapQuality={}
+    middleFlow2.add({type = "label", name = "label_gridSize", caption = {"label-grid-size"}, tooltip = {"tooltip-grid-size"}})
+    local tbl = middleFlow2.add({type = "table", name = "table_gridSize", colspan = 1})
+    global._radios.gridSize={}
     local i = 1
-    for i = 1, 5, 1 do
-        global._radios.mapQuality[i] = tbl.add({type = "radiobutton", name = "FactorioMaps_radio_mapQuality_" .. tostring(i), state = false, caption = {"radio-map-quality-" .. tostring(i)}, tooltip = {"tooltip-map-quality-radio-" .. tostring(i)}})
+    for i = 1, 4, 1 do
+        global._radios.gridSize[i] = tbl.add({type = "radiobutton", name = "FactorioMaps_radio_gridSize_" .. tostring(i), state = false, caption = {"radio-grid-size-" .. tostring(i)}, tooltip = {"tooltip-grid-size-radio-" .. tostring(i)}})
     end
-    fm.gui.radio.mapQualitySelect(fm.cfg.get("mapQuality"))
+    fm.gui.radio.gridSizeSelect(fm.cfg.get("gridSize"))
 
     middleFlow2.add({type = "label", name = "label_extension", caption = {"label-extension"}, tooltip = {"tooltip-extension"}})
     local tbl = middleFlow2.add({type = "table", name = "table_extension", colspan = 1})
