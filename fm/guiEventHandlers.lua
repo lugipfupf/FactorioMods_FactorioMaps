@@ -173,7 +173,7 @@ function fm.gui.actions.baseSize(event)
             rightPane.topFlow.FactorioMaps_bottomRightY.text = maxY
         end
     else
-        player.print("Either you haven't built anything yet, or there is something very wrong )")
+        player.print("Either you haven't built anything yet, or there is something very wrong ;)")
     end
 end
 
@@ -198,7 +198,8 @@ function fm.gui.actions.generate(event)
     data.altInfo = fm.cfg.get("altInfo")
     --data. = fm.cfg.get("")
 
-    fm.generateMap(player, data)
+    fm.generateMap(data)
+    fm.generateIndex(data)
 end
 
 --------------------------------

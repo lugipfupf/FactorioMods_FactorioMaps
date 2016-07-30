@@ -25,11 +25,11 @@ end
 
 function fm.helpers.cropToBase(player_name_or_index)
     local player = game.players[player_name_or_index]
-	-- code copied from Max size, to shrink the initial area quite a bit, before searching for max builded area
-	local minX = nil
-	local minY = nil
-	local maxX = nil
-	local maxY = nil
+    -- code copied from Max size, to shrink the initial area quite a bit, before searching for max builded area
+    local minX = nil
+    local minY = nil
+    local maxX = nil
+    local maxY = nil
     local entityFilter = {
         force = player.force.name
     }
@@ -38,13 +38,13 @@ function fm.helpers.cropToBase(player_name_or_index)
         type = "player"
     }
 
-	for chunk in player.surface.get_chunks() do -- first find max explored area, to shrink the area to search for player-built items a bit
-		if(game.forces.player.is_chunk_charted(player.surface,{chunk.x,chunk.y})) then -- if explored by player
+    for chunk in player.surface.get_chunks() do -- first find max explored area, to shrink the area to search for player-built items a bit
+        if(game.forces.player.is_chunk_charted(player.surface,{chunk.x,chunk.y})) then -- if explored by player
             local area = Chunk.to_area({chunk.x,chunk.y})
             entityFilter.area = area
             playerFilter.area = area
-			local entities = player.surface.count_entities_filtered(entityFilter)
-			local players = player.surface.count_entities_filtered(playerFilter)
+            local entities = player.surface.count_entities_filtered(entityFilter)
+            local players = player.surface.count_entities_filtered(playerFilter)
             if (entities - players > 0) then
                 local tmpChunk = Chunk.to_area(chunk)
                 minX = fm.helpers.getMin(minX, tmpChunk.left_top.x)
@@ -53,19 +53,19 @@ function fm.helpers.cropToBase(player_name_or_index)
                 maxX = fm.helpers.getMax(maxX, tmpChunk.right_bottom.x)
                 maxY = fm.helpers.getMax(maxY, tmpChunk.right_bottom.y)
             end
-		end
+        end
 
-	end
+    end
 
-	if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
-		--Turn chunk x/y pos in to position x/y then adds two chunks to each for good measure.
-		minX = minX - 64
-		minY = minY - 64
-		maxX = maxX + 64
-		maxY = maxY + 64
+    if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
+        --Turn chunk x/y pos in to position x/y then adds two chunks to each for good measure.
+        minX = minX - 64
+        minY = minY - 64
+        maxX = maxX + 64
+        maxY = maxY + 64
 
         return minX, minY, maxX, maxY
-	end
+    end
 end
 
 function fm.helpers.getMin(num1, num2)

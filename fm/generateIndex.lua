@@ -1,8 +1,8 @@
 function fm.generateIndex(data)
     -- generate index.html
-    local pathname = "FactorioMaps/".. fm.cfg.get("folderName") .."/index.html"
+    local pathName = "FactorioMaps/" .. data.folderName .. "/index.html"
 
-    local indextext = [[
+    local indexText = [[
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,30 +19,30 @@ function fm.generateIndex(data)
 <script>
 function CustomMapType() {}
 
-CustomMapType.prototype.tileSize = new google.maps.Size(]] .. gridsizearray[gridsizeindex] .. "," .. gridsizearray[gridsizeindex] .. [[);
-CustomMapType.prototype.minZoom = ]].. minzoom .. [[;
-CustomMapType.prototype.maxZoom = ]].. maxzoom .. [[;
+CustomMapType.prototype.tileSize = new google.maps.Size(]] .. data.index.gridSize .. "," .. data.index.gridSize .. [[);
+CustomMapType.prototype.minZoom = ]].. data.index.minZoomLevel .. [[;
+CustomMapType.prototype.maxZoom = ]].. data.index.maxZoomLevel .. [[;
 CustomMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
     var div = ownerDocument.createElement('DIV');
     var baseURL = 'Images/';
     ]]
     --debug set isPNG in right place
-    if(fm.cfg.get("extension") == 2) then
-        indextext = indextext .. [[
+    if(data.extension == 2) then
+        indexText = indexText .. [[
             if (zoom === ]].. maxzoom..[[) {
                 ext = "png";
             } else {
                 ext = "jpg";
             }
             ]]
-    elseif(fm.cfg.get("extension")==3) then
-        indextext = indextext .. [[ext = "png";
+    elseif(data.extension==3) then
+        indexText = indexText .. [[ext = "png";
 ]]
     else
-        indextext = indextext .. [[ext = "jpg";
+        indexText = indexText .. [[ext = "jpg";
 ]]
     end
-    indextext = indextext .. [[
+    indexText = indexText .. [[
     baseURL += zoom + '_' + coord.x + '_' + coord.y + '.' + ext;
     div.style.width = this.tileSize.width + 'px';
     div.style.height = this.tileSize.height + 'px';
@@ -82,9 +82,9 @@ if ("onhashchange" in window) {
 
 function initialize() {
     var mapOptions = {
-        zoom: ]].. (minzoom) ..[[,
-        // minZoom: ]]..(minzoom) ..[[,
-        // maxZoom: ]].. (maxzoomlevel==1 and (maxzoom-1) or maxzoom) ..[[,
+        zoom: ]].. (data.index.minZoomLevel) ..[[,
+        // minZoom: ]]..(data.index.minZoomLevel) ..[[,
+        // maxZoom: ]].. (data.index.maxZoomLevel == 1 and (data.index.maxZoomLevel - 1) or data.index.maxZoomLevel) ..[[,
         isPng: false,
         mapTypeControl: false,
         streetViewControl: false,
@@ -128,11 +128,11 @@ function addoutline()
     var flightPlanCoordinates = [
     ]]
 
-    for k,v in pairs(linesarray) do
-        indextext = indextext .. "new google.maps.LatLng(".. v.lat ..",".. v.lng .."),\r\n"
-    end
+--    for k,v in pairs(data.index.linesArray) do
+--        indexText = indexText .. "new google.maps.LatLng(".. v.lat ..",".. v.lng .."),\r\n"
+--    end
 
-        indextext = indextext .. [[
+        indexText = indexText .. [[
     ];
     var flightPath = new google.maps.Polyline({
       path: flightPlanCoordinates,
@@ -150,6 +150,6 @@ function addoutline()
 </body>
 </html>]]
 
-    game.write_file(pathname, indextext)
+    game.write_file(pathName, indexText)
 
 end
