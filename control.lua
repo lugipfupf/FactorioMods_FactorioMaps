@@ -56,4 +56,9 @@ end)
 
 script.on_event(defines.events.on_tick, function(event)
     fm.gui.updateCoords()
+    if fm.cfg.get("resetDay") then
+        if game.tick > fm.cfg.get("resetDayTick") + 3 then
+            fm.helpers.makeDay(fm.cfg.get("resetDayFor"), true)
+        end
+    end
 end)

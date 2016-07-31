@@ -8,20 +8,18 @@ function fm.generateMap(data)
 
     local inGameTotalWidth = math.ceil(math.abs(data.topLeft.x) + math.abs(data.bottomRight.x))
     local inGameTotalHeight = math.ceil(math.abs(data.topLeft.y) + math.abs(data.bottomRight.y))
-    local inGameResolution = 0
     local inGameCenter = Area.center({data.topLeft, data.bottomRight})
 
+    --Resolution to use for grid sections
     local gridSizes = {256, 512, 1024, 2048}
-    local gridSize = gridSizes[data.gridSize]
+    local gridSize = gridSizes[data.gridSizeIndex]
 
+    -- These are the number of tiles per grid section
+    -- gridPixelSize[x] = gridSize[x] / 32 -- 32 is a hardcoded Factorio value for pixels per tile.
     local gridPixelSizes = {8, 16, 32, 64}
-    local gridPixelSize = gridPixelSizes[data.gridSize]
+    local gridPixelSize = gridPixelSizes[data.gridSizeIndex]
 
-    local numHScreenshots = 0
-    local numVScreenshots = 0
-
-    local currentZoomLevel = 1 -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
-    local minZoomLevel = data.gridSize
+    local minZoomLevel = data.gridSizeIndex
     local maxZoomLevel = 0 -- default
 
     local resolutionArray = {8,16,32,64,128,256,512,1024,2048,4096,8192} -- resolution for each zoom level, lvl 0 is always 8x8 (256x256 pixels)
@@ -30,7 +28,6 @@ function fm.generateMap(data)
     for _, resolution in pairs(resolutionArray) do
         if(inGameTotalWidth < resolution and inGameTotalHeight < resolution) then
             maxZoomLevel = tmpCounter
-            inGameResolution = resolution
             break
         end
         tmpCounter = tmpCounter + 1
@@ -45,25 +42,28 @@ function fm.generateMap(data)
     data.index.minZoomLevel = minZoomLevel
     data.index.gridSize = gridSize
     data.index.gridPixelSize = gridPixelSize
-    data.index.inGameResolution = inGameResolution
 
     --Temp variables used in loops
+    local currentZoomLevel = 1 / 2 ^ (maxZoomLevel - minZoomLevel) -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
     local extension = ""
     local pathText = ""
     local positionText = ""
     local resolutionText = ""
-    local screenshotTopLeftX = 0
-    local screenshotTopLeftY = 0
+    local screenshotSize = gridPixelSize / currentZoomLevel
+    local numHScreenshots = math.ceil(inGameTotalWidth / screenshotSize)
+    local numVScreenshots =  math.ceil(inGameTotalHeight / screenshotSize)
 
-    numHScreenshots = math.ceil(inGameTotalWidth / gridPixelSize)
-    numVScreenshots =  math.ceil(inGameTotalHeight / gridPixelSize)
-    --Attempts to align the center of the map with the center of the base center
-    --Really only works for zoom level 1
-    --Need to find magic math for aligning it for all zoom levels. This will require adjusting num*Screenshots
-    screenshotTopLeftX = inGameCenter.x - math.floor(numHScreenshots * gridPixelSize / 2)
-    screenshotTopLeftY = inGameCenter.y - math.floor(numVScreenshots * gridPixelSize / 2)
+    --Aligns the center of the Google map with the center of the coords we are making a map of.
+    local screenshotWidth = screenshotSize * numHScreenshots
+    local screenshotHeight = screenshotSize * numVScreenshots
+    local screenshotCenter = {x = screenshotWidth / 2, y = screenshotHeight / 2}
+    local screenshotTopLeftX = inGameCenter.x - screenshotCenter.x
+    local screenshotTopLeftY = inGameCenter.y - screenshotCenter.y
 
-    for z = maxZoomLevel, minZoomLevel, -1 do  -- max and min zoomlevels
+    if data.dayOnly then
+        fm.helpers.makeDay(data.surfaceName)
+    end
+    for z = minZoomLevel, maxZoomLevel, 1 do  -- max and min zoomlevels
         for y = 0, numVScreenshots - 1 do
             for x = 0, numHScreenshots - 1 do
                 if((data.extension == 2 and z == maxZoomLevel) or data.extension == 3) then
@@ -77,8 +77,8 @@ function fm.generateMap(data)
             end
         end
 
-        currentZoomLevel = currentZoomLevel / 2
-        numHScreenshots = math.ceil(numHScreenshots / 2)
-        numVScreenshots = math.ceil(numVScreenshots / 2)
+        currentZoomLevel = currentZoomLevel * 2
+        numHScreenshots = numHScreenshots * 2
+        numVScreenshots = numVScreenshots * 2
     end
 end

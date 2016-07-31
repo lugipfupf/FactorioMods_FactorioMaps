@@ -3,6 +3,25 @@ require "stdlib/area/chunk"
 
 fm.helpers = {}
 
+function fm.helpers.makeDay(surface_name_or_index, reset)
+    local surface = game.surfaces[surface_name_or_index]
+
+    if not reset then
+        global["_factoriomaps_" .. surface.name .. "_time"] = surface.daytime
+        fm.cfg.set("resetDay", true)
+        fm.cfg.set("resetDayFor", surface.name)
+        fm.cfg.set("resetDayTick", game.tick)
+        surface.daytime = 0
+    elseif reset then
+        local tempTime = global["_factoriomaps_" .. surface.name .. "_time"] + surface.daytime;
+        if tempTime > 1 then tempTime = tempTime - 1; end
+        surface.daytime = tempTime;
+        fm.cfg.set("resetDay", nil)
+        fm.cfg.set("resetDayFor", nil)
+        fm.cfg.set("resetDayTick", nil)
+    end
+end
+
 function fm.helpers.maxSize(player_name_or_index)
     local player = game.players[player_name_or_index]
     local minX = 0
@@ -20,7 +39,7 @@ function fm.helpers.maxSize(player_name_or_index)
         end
     end
 
-    return minX*32, minY*32, maxX*32, maxY*32
+    return minX * 32, minY * 32, maxX * 32, maxY * 32
 end
 
 function fm.helpers.cropToBase(player_name_or_index)
@@ -58,11 +77,11 @@ function fm.helpers.cropToBase(player_name_or_index)
     end
 
     if(minX ~= nil and minY ~= nil and maxX ~= nil and maxY ~= nil) then
-        --Turn chunk x/y pos in to position x/y then adds two chunks to each for good measure.
-        minX = minX - 64
-        minY = minY - 64
-        maxX = maxX + 64
-        maxY = maxY + 64
+        --Turn chunk x/y pos in to position x/y then adds a chunks to each for good measure.
+        minX = minX - 32
+        minY = minY - 32
+        maxX = maxX + 32
+        maxY = maxY + 32
 
         return minX, minY, maxX, maxY
     end

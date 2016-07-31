@@ -192,10 +192,11 @@ function fm.gui.actions.generate(event)
     }
 
     data.folderName = fm.cfg.get("folderName")
-    data.gridSize = fm.cfg.get("gridSize")
+    data.gridSizeIndex = fm.cfg.get("gridSize")
     data.extension = fm.cfg.get("extension")
     data.dayOnly = fm.cfg.get("dayOnly")
     data.altInfo = fm.cfg.get("altInfo")
+    data.surfaceName = player.surface.name
     --data. = fm.cfg.get("")
 
     fm.generateMap(data)
