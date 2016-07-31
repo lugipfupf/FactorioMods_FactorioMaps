@@ -12,7 +12,7 @@ function fm.helpers.makeDay(surface_name_or_index, reset)
         fm.cfg.set("resetDayFor", surface.name)
         fm.cfg.set("resetDayTick", game.tick)
         surface.daytime = 0
-    elseif reset then
+    else
         local tempTime = global["_factoriomaps_" .. surface.name .. "_time"] + surface.daytime;
         if tempTime > 1 then tempTime = tempTime - 1; end
         surface.daytime = tempTime;

@@ -152,7 +152,7 @@ function fm.gui.actions.maxSize(event)
             rightPane.topFlow.FactorioMaps_bottomRightY.text = maxY
         end
     else
-        player.print("Something went very very wrong...")
+        player.print({"warn-something-went-wrong"})
     end
 end
 
@@ -173,13 +173,26 @@ function fm.gui.actions.baseSize(event)
             rightPane.topFlow.FactorioMaps_bottomRightY.text = maxY
         end
     else
-        player.print("Either you haven't built anything yet, or there is something very wrong ;)")
+        player.print({"warn-nothing-built"})
     end
 end
 
 function fm.gui.actions.generate(event)
+    local players = 0
+    for _, player in pairs(game.players) do
+        if player.valid and player.connected then
+            players = players + 1
+        end
+    end
+
     local player = game.players[event.player_index]
     local data = {}
+
+    if players > 1 then
+        player.print({"warn-no-generate-in-mp"})
+        return
+    end
+
 
     data.topLeft = {
         x = fm.cfg.get("topLeftX"),
@@ -197,7 +210,7 @@ function fm.gui.actions.generate(event)
     data.dayOnly = fm.cfg.get("dayOnly")
     data.altInfo = fm.cfg.get("altInfo")
     data.surfaceName = player.surface.name
-    --data. = fm.cfg.get("")
+    data.player_index = player.index
 
     fm.generateMap(data)
     fm.generateIndex(data)
