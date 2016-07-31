@@ -39,13 +39,23 @@ fakePlayer.reach_resource_distance = 0
 fakePlayer.mining_speed = 0
 fakePlayer.running_speed = 0
 fakePlayer.distance_per_frame = 0
+fakePlayer.damage_hit_tint = {r = 0, g = 0, b = 0, a = 0}
+fakePlayer.max_health = 5000
+fakePlayer.resistances ={
+    { type = "fire", percent = 100 },
+    { type = "physical", percent = 100 },
+    { type = "impact", percent = 100 },
+    { type = "explosion", percent = 100 },
+    { type = "acid", percent = 100 },
+    { type = "laser", percent = 100 }
+}
 fakePlayer.animations = {
     level1 = empty_anim_level,
     level2addon = empty_anim_level,
     level3addon = empty_anim_level,
 }
 fakePlayer.light = {{ intensity=0, size=0 }}
-fakePlayer.flags = {"placeable-off-grid", "not-on-map", "not-repairable"}
+fakePlayer.flags = {"placeable-neutral", "player-creation", "placeable-off-grid", "not-on-map", "not-repairable"}
 fakePlayer.collision_mask = {"ground-tile"}
 
 data:extend({ fakePlayer })
