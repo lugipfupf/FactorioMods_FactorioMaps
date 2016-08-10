@@ -21,8 +21,10 @@ require "fm.remote"
 require "fm.viewer"
 
 script.on_init(function()
-    global._radios = {}
     global.config = {}
+    global.player_data = {}
+    global._radios = {}
+
     fm.cfg = Config.new( global.config )
     fm.config.applyDefaults()
 end)
