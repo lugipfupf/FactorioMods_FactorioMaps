@@ -13,7 +13,7 @@ data.raw["gui-style"].default["FactorioMaps_button_style"] = {
 
 data.raw["gui-style"].default["FactorioMaps_sprite_button"] = {
     type = "button_style",
-    parent = "cmm_button_style",
+    parent = "FactorioMaps_button_style",
     width = 32,
     height = 32,
     top_padding = 0,
