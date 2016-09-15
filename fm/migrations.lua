@@ -2,10 +2,10 @@
 fm.migrations = {}
 
 function fm.migrations.doUpdate(oldVersion, newVersion)
-    Game.print_all({"Updater", "Version changed from " .. oldVersion .. " to " .. newVersion .. "."})
+    Game.print_all("[FactorioMaps] Updater: Version changed from " .. oldVersion .. " to " .. newVersion .. ".")
 
     if oldVersion > newVersion then
-        Game.print_all({"Updater", "Version downgrade detected. I can't believe you've done this."})
+        Game.print_all("[FactorioMaps] Updater: Version downgrade detected. I can't believe you've done this.")
         return
     end
 

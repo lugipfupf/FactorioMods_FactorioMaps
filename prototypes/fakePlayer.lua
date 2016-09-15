@@ -1,4 +1,17 @@
 --Taken with small modifications from YARM.
+data:extend(
+{
+    {
+        type = "resource-category",
+        name = "empty-resource-category",
+    },
+    {
+        type = "recipe-category",
+        name = "empty-recipe-category",
+    },
+})
+
+
 local empty_animation = {
     filename = "__FactorioMaps__/graphics/nil.png",
     priority = "medium",
@@ -28,8 +41,8 @@ local empty_anim_level = {
 
 local fakePlayer = table.deepcopy(data.raw.player.player)
 fakePlayer.name = "FactorioMaps_remote-viewer"
-fakePlayer.crafting_categories = {}
-fakePlayer.mining_categories = {}
+fakePlayer.crafting_categories = {"empty-recipe-category"}
+fakePlayer.mining_categories = {"empty-resource-category"}
 fakePlayer.healing_per_tick = 100
 fakePlayer.inventory_size = 0
 fakePlayer.build_distance = 0

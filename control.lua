@@ -27,6 +27,7 @@ script.on_init(function()
 
     fm.cfg = Config.new( global.config )
     fm.config.applyDefaults()
+    fm.gui.showAllMainButton()
 end)
 
 script.on_load(function()
@@ -46,7 +47,7 @@ end)
 
 script.on_configuration_changed(function (event)
     for modName,modTable in pairs(event.mod_changes) do
-        if modName == "FactorioMaps" then
+        if modName == "FactorioMaps" and modTable.old_version ~= nil then
             fm.migrations.doUpdate(modTable.old_version, modTable.new_version)
         end
     end
