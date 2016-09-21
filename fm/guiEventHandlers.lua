@@ -270,7 +270,6 @@ function fm.gui.actions.topLeftView(event)
 end
 
 function fm.gui.actions.topLeftPlayer(event)
-    Game.print_all("Using topLeftPlayer clicked")
     local player = game.players[event.player_index]
     local x = math.floor(player.position.x)
     local y = math.floor(player.position.y)
@@ -289,7 +288,6 @@ function fm.gui.actions.bottomRightView(event)
 end
 
 function fm.gui.actions.bottomRightPlayer(event)
-    Game.print_all("Using bottomRightPlayer clicked")
     local player = game.players[event.player_index]
     local x = math.floor(player.position.x)
     local y = math.floor(player.position.y)
