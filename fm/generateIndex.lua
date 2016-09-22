@@ -29,7 +29,7 @@ CustomMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
     --debug set isPNG in right place
     if(data.extension == 2) then
         indexText = indexText .. [[
-            if (zoom === ]].. maxzoom..[[) {
+            if (zoom === ]].. data.index.maxZoomLevel..[[) {
                 ext = "png";
             } else {
                 ext = "jpg";
