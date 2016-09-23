@@ -6,7 +6,7 @@ if not fm.gui then error("Hey silly. don't include this directly!") end
 --------------------------------
 function fm.gui.getMainButton(player_index_or_name)
     local player = game.players[player_index_or_name]
-    if (not player or not player.valid or not player.connected) then
+    if (not player or not player.valid) then --or not player.connected <- broken in 0.14 Single-player when adding the mod to a SP game. Works perfectly fine after that.
         return nil
     end
     if (player.gui.top.FactorioMaps_mainButton ~= nil) then
@@ -23,7 +23,7 @@ end
 
 function fm.gui.showMainButton(player_index_or_name)
     local player = game.players[player_index_or_name]
-    if (not player or not player.valid or not player.connected) then
+    if (not player or not player.valid) then --or not player.connected <- broken in 0.14 Single-player when adding the mod to a SP game. Works perfectly fine after that.
         return false
     end
     if (not fm.gui.getMainButton(player_index_or_name)) then

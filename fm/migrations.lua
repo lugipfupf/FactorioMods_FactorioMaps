@@ -13,6 +13,10 @@ function fm.migrations.doUpdate(oldVersion, newVersion)
         fm.migrations.to_0_7_0()
     end
 
+    if oldVersion < "0.7.1" then
+        fm.migrations.to_0_7_1()
+    end
+
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -40,5 +44,11 @@ function fm.migrations.to_0_7_0()
     --Since this is a migrated to 0.7.0 save we need to make fm.cfg since on_load couldn't
     fm.cfg = Config.new(global.config)
     fm.config.applyDefaults(true)
+    fm.gui.showAllMainButton()
+end
+
+--Fix broken player.connected in on_init event when adding the mod to an existing in single-player only.
+--Multiplayer is fine in all cases but this will "fix" that too.
+function fm.migrations.to_0_7_1()
     fm.gui.showAllMainButton()
 end
