@@ -17,7 +17,7 @@ function fm.generateIndex(data)
 <title>Factorio Maps</title>
 <!-- For local use, don't change anything. For server (making it available on a website) use, get a Google Maps API key (get one here: https://developers.google.com/maps/documentation/javascript/get-api-key), paste your key in the line below this one where it says "INSERTAPIKEY", uncomment the line below and two lines down delete the second <!-- and the first --> 
  <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=INSERTAPIKEY"></script> -->
- <!-- --> <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script> <!-- -->
+ <!-- --> <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script> <!-- -->
 <script>
 function CustomMapType() {}
 
