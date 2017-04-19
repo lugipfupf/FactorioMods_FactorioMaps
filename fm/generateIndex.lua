@@ -64,7 +64,6 @@ function update_url() {
     var href = location.href;
 
     href = href.split("#")[0] || href;
-    href = encodeURI(href);
     window.location.replace(href + '#' + center.lat().toFixed(2) + ',' + center.lng().toFixed(2) + ',' + zoom);
 }
 
