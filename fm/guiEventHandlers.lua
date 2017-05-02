@@ -19,6 +19,7 @@ function fm.gui.registerAllHandlers()
     Gui.on_checked_state_changed("FactorioMaps_altInfo", fm.gui.actions.altInfo)
     Gui.on_checked_state_changed("FactorioMaps_radio_gridSize_", fm.gui.actions.gridSizeRadio)
     Gui.on_checked_state_changed("FactorioMaps_radio_extension_", fm.gui.actions.extensionRadio)
+    Gui.on_checked_state_changed("FactorioMaps_extraZoomIn", fm.gui.actions.extraZoomIn)
 
     Gui.on_text_changed("FactorioMaps_folderName", fm.gui.actions.folderName)
     Gui.on_text_changed("FactorioMaps_topLeftX", fm.gui.actions.topLeftX)
@@ -193,7 +194,6 @@ function fm.gui.actions.generate(event)
         return
     end
 
-
     data.topLeft = {
         x = fm.cfg.get("topLeftX"),
         y = fm.cfg.get("topLeftY")
@@ -209,8 +209,12 @@ function fm.gui.actions.generate(event)
     data.extension = fm.cfg.get("extension")
     data.dayOnly = fm.cfg.get("dayOnly")
     data.altInfo = fm.cfg.get("altInfo")
+    data.extraZoomIn = fm.cfg.get("extraZoomIn")
     data.surfaceName = player.surface.name
     data.player_index = player.index
+
+    local psettings = settings.get_player_settings(player)
+    data.googleKey = settings.player["FM_GoogleAPIKey"].value
 
     fm.generateMap(data)
     fm.generateIndex(data)
@@ -259,6 +263,10 @@ end
 function fm.gui.actions.extensionRadio(event)
     local num = fm.gui.radio.selector(event)
     fm.cfg.set("extension", num)
+end
+
+function fm.gui.actions.extraZoomIn(event)
+    fm.cfg.set("extraZoomIn", event.state)
 end
 
 function fm.gui.actions.viewReturn(event)

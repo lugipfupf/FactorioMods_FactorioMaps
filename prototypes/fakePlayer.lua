@@ -19,7 +19,7 @@ local empty_animation = {
     height = 0,
     direction_count = 18,
     frame_count = 1,
-    animation_speed = 0,
+    animation_speed = 1,
     shift = {0,0},
     axially_symmetrical = false,
 }

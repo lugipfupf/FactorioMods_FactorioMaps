@@ -51,6 +51,7 @@ function fm.viewer(event, coords, goBack)
 
         -- make us a viewer and put us in it
         local viewer = player.surface.create_entity({name="FactorioMaps_remote-viewer", position=coords, force=player.force})
+        viewer.destructible = false
         player.character = viewer
 
         -- don't leave an old one behind

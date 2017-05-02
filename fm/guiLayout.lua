@@ -195,7 +195,10 @@ function fm.gui.showRightPane(player_index_or_name)
     fm.gui.radio.extensionSelect(fm.cfg.get("extension"))
 
     local middleFlow3 = rightPane.add({type = "flow", name = "middleFlow3", direction = "horizontal"})
+
     local bottomFlow = rightPane.add({type = "flow", name = "bottomFlow", direction = "horizontal"})
+    bottomFlow.add({type = "checkbox", name = "FactorioMaps_extraZoomIn", state = fm.cfg.get("extraZoomIn"), caption = {"label-extraZoomIn"}, tooltip = {"tooltip-extraZoomIn"}})
+
     rightPane.add({type = "label", name = "label_currentPlayerCoords", caption = {"label-current-player-coords", "nauvis", 0, 0}, tooltip = {"tooltip-current-player-coords"}})
 end
 
