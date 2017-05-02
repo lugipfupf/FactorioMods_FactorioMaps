@@ -6,6 +6,7 @@ local config_defaults = {
     altInfo = false,
     folderName = "TempNameChangeMe!",
     customSize = false,
+    extraZoomIn = false,
     topLeftX = -1000,
     topLeftY = -1000,
     bottomRightX = 1000,

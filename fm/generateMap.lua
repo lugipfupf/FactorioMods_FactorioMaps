@@ -33,7 +33,7 @@ function fm.generateMap(data)
         tmpCounter = tmpCounter + 1
     end
 
-    if maxZoomLevel > 0 then maxZoomLevel = maxZoomLevel - 1 end
+    if maxZoomLevel > 0 and data.extraZoomIn ~= true then maxZoomLevel = maxZoomLevel - 1 end
     if maxZoomLevel < minZoomLevel then maxZoomLevel = minZoomLevel end
 
     --Setup the results table for feeding into generateIndex

@@ -17,6 +17,10 @@ function fm.migrations.doUpdate(oldVersion, newVersion)
         fm.migrations.to_0_7_1()
     end
 
+    if oldVersion < "0.15.1" then
+        fm.migrations.to_0_15_1()
+    end
+
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -51,4 +55,9 @@ end
 --Multiplayer is fine in all cases but this will "fix" that too.
 function fm.migrations.to_0_7_1()
     fm.gui.showAllMainButton()
+end
+
+--Add in the new config extraZoomIn.
+function fm.migrations.to_0_15_1()
+    fm.config.applyDefaults(false)
 end
