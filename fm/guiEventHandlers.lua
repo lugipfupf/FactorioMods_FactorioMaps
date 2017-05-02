@@ -213,7 +213,7 @@ function fm.gui.actions.generate(event)
     data.surfaceName = player.surface.name
     data.player_index = player.index
 
-    local psettings = get_player_settings(player)
+    local psettings = settings.get_player_settings(player)
     data.googleKey = settings.player["FM_GoogleAPIKey"].value
 
     fm.generateMap(data)

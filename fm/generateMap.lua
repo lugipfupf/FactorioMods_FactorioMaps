@@ -45,7 +45,12 @@ function fm.generateMap(data)
     data.index.gridPixelSize = gridPixelSize
 
     --Temp variables used in loops
-    local currentZoomLevel = 1 / 2 ^ (maxZoomLevel + 1 - minZoomLevel) -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
+    local currentZoomLevel = 0;
+    if data.extraZoomIn ~= true then
+        currentZoomLevel = 1 / 2 ^ (maxZoomLevel + 1 - minZoomLevel) -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
+    else
+        currentZoomLevel = 1 / 2 ^ (maxZoomLevel - minZoomLevel) -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
+    end
     local extension = ""
     local pathText = ""
     local positionText = ""
