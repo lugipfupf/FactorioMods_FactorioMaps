@@ -193,7 +193,6 @@ function fm.gui.actions.generate(event)
         return
     end
 
-
     data.topLeft = {
         x = fm.cfg.get("topLeftX"),
         y = fm.cfg.get("topLeftY")
@@ -211,6 +210,9 @@ function fm.gui.actions.generate(event)
     data.altInfo = fm.cfg.get("altInfo")
     data.surfaceName = player.surface.name
     data.player_index = player.index
+
+    local psettings = get_player_settings(player)
+    data.googleKey = settings.player["FM_GoogleAPIKey"].value
 
     fm.generateMap(data)
     fm.generateIndex(data)
