@@ -4,8 +4,8 @@ fm.migrations = {}
 function fm.migrations.doUpdate(oldVersionString, newVersionString)
     Game.print_all("[FactorioMaps] Updater: Version changed from " .. oldVersionString .. " to " .. newVersionString .. ".")
 
-    local oldVersionTmp = oldVersionString.split(".")
-    local newVersionTmp = newVersionString.split(".")
+    local oldVersionTmp = string.split(oldVersionString, ".")
+    local newVersionTmp = string.split(newVersionString, ".")
 
     --Gives a buffer of 1000 for each section of Factorio's "simver" (Major.Minor.Build)
     local oldVersion = oldVersionTmp[1] * 1000000 + oldVersionTmp[2] * 1000 + oldVersionTmp[3]
@@ -31,7 +31,6 @@ function fm.migrations.doUpdate(oldVersionString, newVersionString)
         Game.print_all("[FactorioMaps] Updater: Migrating to 0.15.1...")
         fm.migrations.to_0_15_1()
     end
-
 end
 
 ------------------------------------------------------------------------------------------------------

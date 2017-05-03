@@ -214,7 +214,7 @@ function fm.gui.actions.generate(event)
     data.player_index = player.index
 
     local psettings = settings.get_player_settings(player)
-    data.googleKey = settings.player["FM_GoogleAPIKey"].value
+    data.googleKey = psettings["FM_GoogleAPIKey"].value
 
     fm.generateMap(data)
     fm.generateIndex(data)
