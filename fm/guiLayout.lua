@@ -2,6 +2,22 @@
 if not fm.gui then error("Hey silly. don't include this directly!") end
 
 --------------------------------
+-- BUTTON CREATOR
+--------------------------------
+function fm.gui.makeSpriteButton(location, button)
+        local button = location.add(button)
+        local bstyle = button.style
+        bstyle.top_padding = 0
+        bstyle.left_padding = 0
+        bstyle.right_padding = 0
+        bstyle.bottom_padding = 0
+        bstyle.minimal_height = 32
+        bstyle.maximal_height = 32
+        bstyle.minimal_width = 32
+        bstyle.maximal_width = 32
+end
+
+--------------------------------
 -- MAIN BUTTON
 --------------------------------
 function fm.gui.getMainButton(player_index_or_name)
@@ -27,7 +43,7 @@ function fm.gui.showMainButton(player_index_or_name)
         return false
     end
     if (not fm.gui.getMainButton(player_index_or_name)) then
-        player.gui.top.add({type = "sprite-button", name = "FactorioMaps_mainButton", caption = "FMaps", sprite = "FactorioMaps_menu_sprite", style = "FactorioMaps_sprite_button"})
+        fm.gui.makeSpriteButton(player.gui.top, {type = "sprite-button", name = "FactorioMaps_mainButton", sprite = "FactorioMaps_menu_sprite", style = "button_style"})
     end
 end
 
@@ -35,6 +51,12 @@ function fm.gui.hideMainButton(player_index_or_name)
     local mainButton = fm.gui.getMainButton(player_index_or_name)
     if (mainButton) then
         mainButton.destroy()
+    end
+end
+
+function fm.gui.hideAllMainButton()
+    for _, player in pairs(game.players) do
+        fm.gui.hideMainButton(player.index)
     end
 end
 
@@ -101,7 +123,7 @@ function fm.gui.showLeftPane(player_index_or_name)
     local topRightFlow = topFlow.add({type = "flow", name = "topRightFlow", direction = "horizontal"})
     topRightFlow.add({type = "label", name = "filler", caption = "_____________"})
     topRightFlow.filler.style.font_color = {r = 48,g = 75, b = 74}
-    topRightFlow.add({type = "button", name = "FactorioMaps_advancedButton", style = "FactorioMaps_button_style", caption = {"button-advanced-settings"}, tooltip = {"tooltip-advanced-settings"}})
+    topRightFlow.add({type = "button", name = "FactorioMaps_advancedButton", style = "button_style", caption = {"button-advanced-settings"}, tooltip = {"tooltip-advanced-settings"}})
 
     local folderFlow = leftPane.add({type = "flow", name = "folderFlow", direction = "horizontal"})
 --    folderFlow.style.minimal_width = 250
@@ -110,11 +132,11 @@ function fm.gui.showLeftPane(player_index_or_name)
     folderFlow.add({type = "textfield", name = "FactorioMaps_folderName", text = fm.cfg.get("folderName"), tooltip = {"tooltip-folder-name"}})
 
     local bottomFlow = leftPane.add({type = "flow", name = "bottomFlow", direction = "horizontal"})
-    bottomFlow.add({type = "button", name = "FactorioMaps_maxSize", style = "FactorioMaps_button_style", caption = {"button-max-size"}, tooltip = {"tooltip-max-size"}})
-    bottomFlow.add({type = "button", name = "FactorioMaps_baseSize", style = "FactorioMaps_button_style", caption = {"button-base-size"}, tooltip = {"tooltip-base-size"}})
+    bottomFlow.add({type = "button", name = "FactorioMaps_maxSize", style = "button_style", caption = {"button-max-size"}, tooltip = {"tooltip-max-size"}})
+    bottomFlow.add({type = "button", name = "FactorioMaps_baseSize", style = "button_style", caption = {"button-base-size"}, tooltip = {"tooltip-base-size"}})
     bottomFlow.add({type = "label", name = "filler", caption = "_____________"})
     bottomFlow.filler.style.font_color = {r = 48,g = 75, b = 74}
-    bottomFlow.add({type = "button", name = "FactorioMaps_generate", style = "FactorioMaps_button_style", caption = {"button-generate"}, tooltip = {"tooltip-generate"}})
+    bottomFlow.add({type = "button", name = "FactorioMaps_generate", style = "button_style", caption = {"button-generate"}, tooltip = {"tooltip-generate"}})
 end
 
 function fm.gui.hideLeftPane(player_index_or_name)
@@ -151,7 +173,7 @@ function fm.gui.showRightPane(player_index_or_name)
     tbl.add({type = "label"})
     tbl.add({type = "label"})
     tbl.add({type = "label"})
-    tbl.add({type = "sprite-button", name = "FactorioMaps_viewReturn", sprite = "FactorioMaps_return_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-top-left-return"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_viewReturn", sprite = "FactorioMaps_return_sprite", style = "button_style", tooltip = {"tooltip-top-left-return"}})
     tbl.add({type = "label"})
 
     tbl.add({type = "label", name = "label_top-left-xy", caption = {"label-top-left-xy"}, tooltip = {"tooltip-top-left-xy"}})
@@ -161,9 +183,9 @@ function fm.gui.showRightPane(player_index_or_name)
     local topLeftY = tbl.add({type = "textfield", name = "FactorioMaps_topLeftY", text = fm.cfg.get("topLeftY"), tooltip = {"tooltip-top-left-y"}})
     topLeftY.style.minimal_width = 50
     topLeftY.style.maximal_width = 50
-    tbl.add({type = "sprite-button", name = "FactorioMaps_topLeftView", sprite = "FactorioMaps_view_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-top-left-view"}})
---    tbl.add({type = "sprite-button", name = "FactorioMaps_topLeftReturn", sprite = "FactorioMaps_return_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-top-left-return"}})
-    tbl.add({type = "sprite-button", name = "FactorioMaps_topLeftPlayer", sprite = "FactorioMaps_player_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-top-left-player"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftView", sprite = "FactorioMaps_view_sprite", style = "button_style", tooltip = {"tooltip-top-left-view"}})
+--    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftReturn", sprite = "FactorioMaps_return_sprite", style = "button_style", tooltip = {"tooltip-top-left-return"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftPlayer", sprite = "FactorioMaps_player_sprite", style = "button_style", tooltip = {"tooltip-top-left-player"}})
 
     tbl.add({type = "label", name = "label_bottom-right-xy", caption = {"label-bottom-right-xy"}, tooltip = {"tooltip-bottom-right-xy"}})
     local bottomRightX = tbl.add({type = "textfield", name = "FactorioMaps_bottomRightX", text = fm.cfg.get("bottomRightX"), tooltip = {"tooltip-bottom-right-x"}})
@@ -172,9 +194,9 @@ function fm.gui.showRightPane(player_index_or_name)
     local bottomRightY = tbl.add({type = "textfield", name = "FactorioMaps_bottomRightY", text = fm.cfg.get("bottomRightY"), tooltip = {"tooltip-bottom-right-y"}})
     bottomRightY.style.minimal_width = 50
     bottomRightY.style.maximal_width = 50
-    tbl.add({type = "sprite-button", name = "FactorioMaps_bottomRightView", sprite = "FactorioMaps_view_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-bottom-right-view"}})
---    tbl.add({type = "sprite-button", name = "FactorioMaps_bottomRightReturn", sprite = "FactorioMaps_return_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-bottom-right-return"}})
-    tbl.add({type = "sprite-button", name = "FactorioMaps_bottomRightPlayer", sprite = "FactorioMaps_player_sprite", style = "FactorioMaps_sprite_button", tooltip = {"tooltip-bottom-right-player"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightView", sprite = "FactorioMaps_view_sprite", style = "button_style", tooltip = {"tooltip-bottom-right-view"}})
+--    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightReturn", sprite = "FactorioMaps_return_sprite", style = "button_style", tooltip = {"tooltip-bottom-right-return"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightPlayer", sprite = "FactorioMaps_player_sprite", style = "button_style", tooltip = {"tooltip-bottom-right-player"}})
 
     local middleFlow2 = rightPane.add({type = "flow", name = "middleFlow2", direction = "horizontal"})
     middleFlow2.add({type = "label", name = "label_gridSize", caption = {"label-grid-size"}, tooltip = {"tooltip-grid-size"}})

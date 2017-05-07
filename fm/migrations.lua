@@ -1,8 +1,16 @@
 
 fm.migrations = {}
 
+function fm.migrations.notify(msg)
+    Game.print_all("[FactorioMaps] Migrations: " .. msg)
+end
+
+function fm.migrations.updateMessage(msg)
+    fm.migrations.notify("Migrating save to V" .. msg .. "...")
+end
+
 function fm.migrations.doUpdate(oldVersionString, newVersionString)
-    Game.print_all("[FactorioMaps] Updater: Version changed from " .. oldVersionString .. " to " .. newVersionString .. ".")
+    fm.migrations.notify("Version changed from " .. oldVersionString .. " to " .. newVersionString .. ".")
 
     local oldVersionTmp = string.split(oldVersionString, ".")
     local newVersionTmp = string.split(newVersionString, ".")
@@ -12,24 +20,29 @@ function fm.migrations.doUpdate(oldVersionString, newVersionString)
     local newVersion = newVersionTmp[1] * 1000000 + newVersionTmp[2] * 1000 + newVersionTmp[3]
 
     if oldVersion > newVersion then
-        Game.print_all("[FactorioMaps] Updater: Version downgrade detected. I can't believe you've done this.")
-        Game.print_all("[FactorioMaps] Updater: I don't have handlers for downgrades so things might break. :(")
+        fm.migrations.notify("Version downgrade detected. I can't believe you've done this.")
+        fm.migrations.notify("This isn't supported so things might break. :(")
         return
     end
 
     if oldVersion < 7000 then
-        Game.print_all("[FactorioMaps] Updater: Migrating to 0.7.0...")
+        fm.migrations.updateMessage("0.7.0")
         fm.migrations.to_0_7_0()
     end
 
     if oldVersion < 7001 then
-        Game.print_all("[FactorioMaps] Updater: Migrating to 0.7.1...")
+        fm.migrations.updateMessage("0.7.1")
         fm.migrations.to_0_7_1()
     end
 
     if oldVersion < 15001 then
-        Game.print_all("[FactorioMaps] Updater: Migrating to 0.15.1...")
+        fm.migrations.updateMessage("0.15.1")
         fm.migrations.to_0_15_1()
+    end
+
+    if oldVersion < 15003 then
+        fm.migrations.updateMessage("0.15.3")
+        fm.migrations.to_0_15_3()
     end
 end
 
@@ -70,4 +83,10 @@ end
 --Add in the new config extraZoomIn.
 function fm.migrations.to_0_15_1()
     fm.config.applyDefaults(false)
+end
+
+--Remove caption from the main button.
+function fm.migrations.to_0_15_3()
+    fm.gui.hideAllMainButton()
+    fm.gui.showAllMainButton()
 end

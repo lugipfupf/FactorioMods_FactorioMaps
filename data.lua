@@ -1,2 +1,2 @@
-require "prototypes.style"
+require "prototypes.sprites"
 require "prototypes.fakePlayer"
