@@ -43,7 +43,7 @@ function fm.gui.showMainButton(player_index_or_name)
         return false
     end
     if (not fm.gui.getMainButton(player_index_or_name)) then
-        fm.gui.makeSpriteButton(player.gui.top, {type = "sprite-button", name = "FactorioMaps_mainButton", sprite = "FactorioMaps_menu_sprite", style = "button_style"})
+        fm.gui.makeSpriteButton(player.gui.top, {type = "sprite-button", name = "FactorioMaps_mainButton", sprite = "FactorioMaps_menu_sprite", style = "button"})
     end
 end
 
@@ -123,7 +123,7 @@ function fm.gui.showLeftPane(player_index_or_name)
     local topRightFlow = topFlow.add({type = "flow", name = "topRightFlow", direction = "horizontal"})
     topRightFlow.add({type = "label", name = "filler", caption = "_____________"})
     topRightFlow.filler.style.font_color = {r = 48,g = 75, b = 74}
-    topRightFlow.add({type = "button", name = "FactorioMaps_advancedButton", style = "button_style", caption = {"button-advanced-settings"}, tooltip = {"tooltip-advanced-settings"}})
+    topRightFlow.add({type = "button", name = "FactorioMaps_advancedButton", style = "button", caption = {"button-advanced-settings"}, tooltip = {"tooltip-advanced-settings"}})
 
     local folderFlow = leftPane.add({type = "flow", name = "folderFlow", direction = "horizontal"})
 --    folderFlow.style.minimal_width = 250
@@ -132,11 +132,11 @@ function fm.gui.showLeftPane(player_index_or_name)
     folderFlow.add({type = "textfield", name = "FactorioMaps_folderName", text = fm.cfg.get("folderName"), tooltip = {"tooltip-folder-name"}})
 
     local bottomFlow = leftPane.add({type = "flow", name = "bottomFlow", direction = "horizontal"})
-    bottomFlow.add({type = "button", name = "FactorioMaps_maxSize", style = "button_style", caption = {"button-max-size"}, tooltip = {"tooltip-max-size"}})
-    bottomFlow.add({type = "button", name = "FactorioMaps_baseSize", style = "button_style", caption = {"button-base-size"}, tooltip = {"tooltip-base-size"}})
+    bottomFlow.add({type = "button", name = "FactorioMaps_maxSize", style = "button", caption = {"button-max-size"}, tooltip = {"tooltip-max-size"}})
+    bottomFlow.add({type = "button", name = "FactorioMaps_baseSize", style = "button", caption = {"button-base-size"}, tooltip = {"tooltip-base-size"}})
     bottomFlow.add({type = "label", name = "filler", caption = "_____________"})
     bottomFlow.filler.style.font_color = {r = 48,g = 75, b = 74}
-    bottomFlow.add({type = "button", name = "FactorioMaps_generate", style = "button_style", caption = {"button-generate"}, tooltip = {"tooltip-generate"}})
+    bottomFlow.add({type = "button", name = "FactorioMaps_generate", style = "button", caption = {"button-generate"}, tooltip = {"tooltip-generate"}})
 end
 
 function fm.gui.hideLeftPane(player_index_or_name)
@@ -169,11 +169,11 @@ function fm.gui.showRightPane(player_index_or_name)
     local mainWindow = fm.gui.getMainWindow(player_index_or_name)
 
     local rightPane = mainWindow.add({type = "frame", name = "Right", caption = {"label-advanced-settings"}, direction = "vertical"})
-    local tbl = rightPane.add({type = "table", name = "topFlow", colspan = 5})
+    local tbl = rightPane.add({type = "table", name = "topFlow", column_count = 5})
     tbl.add({type = "label"})
     tbl.add({type = "label"})
     tbl.add({type = "label"})
-    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_viewReturn", sprite = "FactorioMaps_return_sprite", style = "button_style", tooltip = {"tooltip-top-left-return"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_viewReturn", sprite = "FactorioMaps_return_sprite", style = "button", tooltip = {"tooltip-top-left-return"}})
     tbl.add({type = "label"})
 
     tbl.add({type = "label", name = "label_top-left-xy", caption = {"label-top-left-xy"}, tooltip = {"tooltip-top-left-xy"}})
@@ -183,9 +183,9 @@ function fm.gui.showRightPane(player_index_or_name)
     local topLeftY = tbl.add({type = "textfield", name = "FactorioMaps_topLeftY", text = fm.cfg.get("topLeftY"), tooltip = {"tooltip-top-left-y"}})
     topLeftY.style.minimal_width = 50
     topLeftY.style.maximal_width = 50
-    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftView", sprite = "FactorioMaps_view_sprite", style = "button_style", tooltip = {"tooltip-top-left-view"}})
---    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftReturn", sprite = "FactorioMaps_return_sprite", style = "button_style", tooltip = {"tooltip-top-left-return"}})
-    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftPlayer", sprite = "FactorioMaps_player_sprite", style = "button_style", tooltip = {"tooltip-top-left-player"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftView", sprite = "FactorioMaps_view_sprite", style = "button", tooltip = {"tooltip-top-left-view"}})
+--    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftReturn", sprite = "FactorioMaps_return_sprite", style = "button", tooltip = {"tooltip-top-left-return"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_topLeftPlayer", sprite = "FactorioMaps_player_sprite", style = "button", tooltip = {"tooltip-top-left-player"}})
 
     tbl.add({type = "label", name = "label_bottom-right-xy", caption = {"label-bottom-right-xy"}, tooltip = {"tooltip-bottom-right-xy"}})
     local bottomRightX = tbl.add({type = "textfield", name = "FactorioMaps_bottomRightX", text = fm.cfg.get("bottomRightX"), tooltip = {"tooltip-bottom-right-x"}})
@@ -194,13 +194,13 @@ function fm.gui.showRightPane(player_index_or_name)
     local bottomRightY = tbl.add({type = "textfield", name = "FactorioMaps_bottomRightY", text = fm.cfg.get("bottomRightY"), tooltip = {"tooltip-bottom-right-y"}})
     bottomRightY.style.minimal_width = 50
     bottomRightY.style.maximal_width = 50
-    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightView", sprite = "FactorioMaps_view_sprite", style = "button_style", tooltip = {"tooltip-bottom-right-view"}})
---    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightReturn", sprite = "FactorioMaps_return_sprite", style = "button_style", tooltip = {"tooltip-bottom-right-return"}})
-    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightPlayer", sprite = "FactorioMaps_player_sprite", style = "button_style", tooltip = {"tooltip-bottom-right-player"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightView", sprite = "FactorioMaps_view_sprite", style = "button", tooltip = {"tooltip-bottom-right-view"}})
+--    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightReturn", sprite = "FactorioMaps_return_sprite", style = "button", tooltip = {"tooltip-bottom-right-return"}})
+    fm.gui.makeSpriteButton(tbl, {type = "sprite-button", name = "FactorioMaps_bottomRightPlayer", sprite = "FactorioMaps_player_sprite", style = "button", tooltip = {"tooltip-bottom-right-player"}})
 
     local middleFlow2 = rightPane.add({type = "flow", name = "middleFlow2", direction = "horizontal"})
     middleFlow2.add({type = "label", name = "label_gridSize", caption = {"label-grid-size"}, tooltip = {"tooltip-grid-size"}})
-    local tbl = middleFlow2.add({type = "table", name = "table_gridSize", colspan = 1})
+    local tbl = middleFlow2.add({type = "table", name = "table_gridSize", column_count = 1})
     global._radios.gridSize={}
     local i = 1
     for i = 1, 4, 1 do
@@ -209,7 +209,7 @@ function fm.gui.showRightPane(player_index_or_name)
     fm.gui.radio.gridSizeSelect(fm.cfg.get("gridSize"))
 
     middleFlow2.add({type = "label", name = "label_extension", caption = {"label-extension"}, tooltip = {"tooltip-extension"}})
-    local tbl = middleFlow2.add({type = "table", name = "table_extension", colspan = 1})
+    local tbl = middleFlow2.add({type = "table", name = "table_extension", column_count = 1})
     global._radios.extension={}
     for i = 1, 3, 1 do
         global._radios.extension[i] = tbl.add({type = "radiobutton", name = "FactorioMaps_radio_extension_" .. tostring(i), state = false, caption = {"radio-extension-" .. tostring(i)}, tooltip = {"tooltip-extension-radio-" .. tostring(i)}})
