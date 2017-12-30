@@ -199,6 +199,6 @@ function addoutline() {
 </html>
 ]]
 
-    game.write_file(pathName, indexText)
+    game.write_file(pathName, indexText, false, data.player_index)
 
 end
