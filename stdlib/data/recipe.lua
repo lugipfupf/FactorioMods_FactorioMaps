@@ -1,22 +1,27 @@
---- Recipe module
+--- For working with raw recipes.
+-- Only usable in the mod data stage.
+-- @see https://wiki.factorio.com/Data.raw Internal object names
+-- @see http://lua-api.factorio.com/latest/Data-Lifecycle.html Factorio data lifecycle
 -- @module Recipe
+-- @usage local Data = require('stdlib/data/data')
 
-require 'stdlib/data/data'
+local fail_if_missing = require 'stdlib/game'['fail_if_missing']
+local Data = require 'stdlib/data/data'
 
-Recipe = {}
+Recipe = {} --luacheck: allow defined top
 
 --- Selects all recipe values where the key matches the selector pattern.
 -- The selector pattern is divided into groups. The pattern should have a colon character `:` to denote the selection for each group.
--- <br/>The first group is for the name of the recipe element
--- <br/>The second group is for the name of keys inside of the recipe element, and is optional. If missing, all elements matching prior groups are returned.
--- <br/>The third group is for the name of values inside of the recipe element, and is optional. If missing, all elements matching prior groups are returned.
--- <p> Selectors without a colon `:` separator are assumed to select all values in the first group.
--- @usage Recipe.select('.*') -- returns a table with all recipes, equivalent to Data.select('recipe:.*')
--- @usage Data.select('steel.*') -- returns a table with all recipes whose name matches 'steel.*'
--- @usage Data.select('steel.*:ingredients') -- returns a table with all ingredients from all recipes whose name matches 'steel.*'
--- @usage Data.select('steel.*:ingredients:iron-plate') -- returns a table with all iron-plate ingredient objects, from all recipes whose name matches 'steel.*'
--- @param pattern to search with
--- @return table containing the elements matching the selector pattern, or an empty table if there was no matches
+-- <p>The first group is for the name of the recipe element.
+-- <p>The second group is for the name of keys inside of the recipe element, and is optional. If missing, all elements matching prior groups are returned.
+-- <p>The third group is for the name of values inside of the recipe element, and is optional. If missing, all elements matching prior groups are returned.
+-- <p>Selectors without a colon `:` separator are assumed to select all values in the first group.
+-- @usage Recipe.select('.*') -- returns an array with all recipes, equivalent to Data.select('recipe:.*')
+-- @usage Recipe.select('steel.*') -- returns an array with all recipes whose name matches 'steel.*'
+-- @usage Recipe.select('steel.*:ingredients') -- returns an array with all ingredients from all recipes whose name matches 'steel.*'
+-- @usage Recipe.select('steel.*:ingredients:iron-plate') -- returns an array with all iron-plate ingredient objects, from all recipes whose name matches 'steel.*'
+-- @tparam string pattern a pattern used for the search
+-- @treturn {nil|Mixed,...} an array containing the elements matching the selector pattern, or an empty array if there were no matches
 function Recipe.select(pattern)
     fail_if_missing(pattern, "missing pattern argument")
 
@@ -47,8 +52,10 @@ function Recipe.select(pattern)
                             end
                         end
                     else
-                        Recipe.format_items({recipe})
-                        table.insert(results, field_value)
+                        for _, value in pairs(field_value) do
+                            setmetatable(value, Recipe._item_metatable.new(value))
+                            table.insert(results, value)
+                        end
                     end
                 end
             end
@@ -62,7 +69,7 @@ end
 
 -- this metatable is set on recipes, to control access to ingredients and results
 Recipe._item_metatable = {}
-Recipe._item_metatable.new = function(item)
+Recipe._item_metatable.new = function(item)  --luacheck: ignore item
     local self = { }
     self.__index = function(tbl, key)
         if type(key) == 'number' then
@@ -100,15 +107,20 @@ Recipe._item_metatable.new = function(item)
     return self
 end
 
+--- Formats the recipes.
+-- @param recipes (<span class="types">{@{Recipe},...}</span>) an array of recipes
+-- @return (<span class="types">{@{Recipe},...}</span>) the formatted recipes
 function Recipe.format_items(recipes)
     recipes = recipes or data.raw.recipe
-    table.each(recipes, function(recipe, recipe_name)
-        if recipe.ingredients and type(recipe.ingredients) == 'table' then
-            table.each(recipe.ingredients, function(ingredient) setmetatable(ingredient, Recipe._item_metatable.new(ingredient)) end)
-        end
-        if recipe.results and type(recipe.results) == 'table' then
-            table.each(recipe.results, function(result) setmetatable(result, Recipe._item_metatable.new(result)) end)
-        end
-    end)
+    table.each(recipes, function(recipe)
+            if recipe.ingredients and type(recipe.ingredients) == 'table' then
+                table.each(recipe.ingredients, function(ingredient) setmetatable(ingredient, Recipe._item_metatable.new(ingredient)) end)
+            end
+            if recipe.results and type(recipe.results) == 'table' then
+                table.each(recipe.results, function(result) setmetatable(result, Recipe._item_metatable.new(result)) end)
+            end
+        end)
     return recipes
 end
+
+return Recipe
