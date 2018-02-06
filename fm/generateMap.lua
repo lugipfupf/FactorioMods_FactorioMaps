@@ -6,9 +6,9 @@ function fm.generateMap(data)
     local basePath = "FactorioMaps/" .. data.folderName
     game.remove_path(basePath)
 
-    local inGameTotalWidth = math.ceil(math.abs(data.topLeft.x) + math.abs(data.bottomRight.x))
-    local inGameTotalHeight = math.ceil(math.abs(data.topLeft.y) + math.abs(data.bottomRight.y))
-    local inGameCenter = Area.center({data.topLeft, data.bottomRight})
+    local mapArea = Area.normalize(Area.round_to_integer({data.topLeft, data.bottomRight}))
+    local _ ,inGameTotalWidth, inGameTotalHeight, _ = Area.size(mapArea)
+    local inGameCenter = Area.center(mapArea)
 
     --Resolution to use for grid sections
     local gridSizes = {256, 512, 1024, 2048}

@@ -1,12 +1,11 @@
 
 --Include needed stdlib libs.
 require "stdlib/config/config"
-require "stdlib/core"
 require "stdlib/entity/entity"
+require "stdlib/event/gui"
 require "stdlib/game"
-require "stdlib/gui/gui"
 require "stdlib/log/logger"
-require "stdlib/string"
+require 'stdlib/utils/string'
 
 fm = {}
 fm.log = Logger.new("FactorioMaps", "debug", true)
