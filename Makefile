@@ -9,7 +9,7 @@ else
 MODNAME = $(shell cat info.json | $(JQ) -r .name)
 MODVERSION = $(shell cat info.json | $(JQ) -r .version)
 FACTORIOVERSION = $(shell cat info.json | $(JQ) -r .factorio_version)
-FACTORIOFOLDER = ../../../AppData/Roaming/ModMyFactory/mods/$(FACTORIOVERSION)
+FACTORIOFOLDER = /mnt/c/Bin/Factorio/Factorio_0.16.47/mods
 endif
 
 all: release
