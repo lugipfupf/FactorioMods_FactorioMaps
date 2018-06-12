@@ -55,7 +55,7 @@ CustomMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
 ]]
     end
     indexText = indexText .. [[
-    baseURL += zoom + '_' + coord.x + '_' + coord.y + '.' + ext;
+    baseURL += zoom + '/' + coord.x + '/' + coord.y + '.' + ext;
     div.style.width = this.tileSize.width + 'px';
     div.style.height = this.tileSize.height + 'px';
     div.style.backgroundImage = 'url(' + baseURL + ')';
