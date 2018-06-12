@@ -78,7 +78,7 @@ function fm.generateMap(data)
                     extension = "jpg"
                 end
                 positionTable = {screenshotTopLeftX + (1 / (2 * currentZoomLevel)) * gridPixelSize + x * (1 / currentZoomLevel) * gridPixelSize, screenshotTopLeftY + (1 / (2 * currentZoomLevel)) * gridPixelSize + y * (1 / currentZoomLevel) * gridPixelSize}
-                pathText = basePath .. "/Images/" .. z .. "_" .. x .. "_" .. y .. "." .. extension
+                pathText = basePath .. "/Images/" .. z .. "/" .. x .. "/" .. y .. "." .. extension
                 game.take_screenshot({by_player=game.players[data.player_index], position = positionTable, resolution = {gridSize, gridSize}, zoom = currentZoomLevel, path = pathText, show_entity_info = data.altInfo})
             end
         end
