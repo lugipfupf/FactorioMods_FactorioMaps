@@ -3,10 +3,10 @@ fm.config = {}
 
 local config_defaults = {
     dayOnly = true,
-    altInfo = false,
-    folderName = "TempNameChangeMe!",
+    altInfo = true,
+    folderName = "",
     customSize = false,
-    extraZoomIn = false,
+    extraZoomIn = true,
     topLeftX = -1000,
     topLeftY = -1000,
     bottomRightX = 1000,
