@@ -121,7 +121,7 @@ script.on_event(defines.events.on_tick, function(event)
             fm._ticks = 3
     
         end
-        game.write_file("FactorioMaps/done.txt", "done", false, data.player_index)
+        game.write_file("FactorioMaps/done.txt", "done", false, event.player_index)
     else
 
         fm.gui.updateCoords()
