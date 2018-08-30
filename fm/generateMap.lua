@@ -140,5 +140,4 @@ function fm.generateMap(data)
                 lastWasActive = false
 	        end
         end
-        game.write_file("FactorioMaps/done.txt", "done", false, data.player_index)
 end
