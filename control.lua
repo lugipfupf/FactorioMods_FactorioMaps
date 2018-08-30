@@ -119,9 +119,9 @@ script.on_event(defines.events.on_tick, function(event)
             fm._topfolder = nil
     
             fm._ticks = 3
-    
+            game.write_file("FactorioMaps/done.txt", "done", false, event.player_index)
         end
-        game.write_file("FactorioMaps/done.txt", "done", false, event.player_index)
+
     else
 
         fm.gui.updateCoords()

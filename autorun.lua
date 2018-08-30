@@ -1,6 +1,5 @@
-
-fm.autorun = {
+﻿fm.autorun = {
     day = true,
-    night = true,
-    path = "test/"
+    night = false,
+    path = "user/jankran/first/2018-08-29/"
 }
