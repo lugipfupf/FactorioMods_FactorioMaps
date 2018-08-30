@@ -57,6 +57,7 @@ function fm.generateMap(data)
 
     --Temp variables used in loops
     local currentZoomLevel = 0;
+    data.extraZoomIn = true
     if data.extraZoomIn ~= true then
         currentZoomLevel = 1 / 2 ^ (maxZoomLevel + 1 - minZoomLevel) -- counter for measuring zoom, 1/1, 1/2,1/4,1/8 etc
     else
