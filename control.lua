@@ -87,7 +87,7 @@ script.on_event(defines.events.on_tick, function(event)
     
             if fm.autorun.day then
                 game.players[event.player_index].surface.daytime = 0
-                fm._subfolder = "day"
+                fm._subfolder = "Day"
                 fm.gui.actions.generate(event)
             end
             
@@ -103,7 +103,7 @@ script.on_event(defines.events.on_tick, function(event)
             
             if fm.autorun.night then
                 game.players[event.player_index].surface.daytime = 0.5
-                fm._subfolder = "night"
+                fm._subfolder = "Night"
                 fm.gui.actions.generate(event)
             end
     
