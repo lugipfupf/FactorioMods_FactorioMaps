@@ -227,7 +227,6 @@ function fm.gui.actions.generate(event)
     data.googleKey = psettings["FM_GoogleAPIKey"].value
 
     fm.generateMap(data)
-    fm.generateIndex(data)
 end
 
 --------------------------------
