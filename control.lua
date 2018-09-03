@@ -71,7 +71,7 @@ script.on_event(defines.events.on_tick, function(event)
         if fm._ticks == nil then
             game.players[event.player_index].surface.daytime = 0
             fm._ticks = 1
-        if fm._ticks < 2 then
+        elseif fm._ticks < 2 then
         
             fm._topfolder = fm.autorun.path
             
