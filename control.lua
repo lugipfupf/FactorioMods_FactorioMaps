@@ -68,8 +68,10 @@ script.on_event(defines.events.on_tick, function(event)
     if fm.autorun then
 
         event.player_index = 1
-    
         if fm._ticks == nil then
+            game.players[event.player_index].surface.daytime = 0
+            fm._ticks = 1
+        if fm._ticks < 2 then
         
             fm._topfolder = fm.autorun.path
             
@@ -93,14 +95,17 @@ script.on_event(defines.events.on_tick, function(event)
             fm.gui.actions.baseSize(event)
     
             if fm.autorun.day then
-                game.players[event.player_index].surface.daytime = 0
                 fm._subfolder = "Day"
                 fm.gui.actions.generate(event)
             end
             
-            fm._ticks = 1
-    
-        elseif fm._ticks < 2  then
+            fm._ticks = 2
+        elseif fm._ticks < 3 then
+            game.players[event.player_index].surface.daytime = 0.5
+            fm._ticks = 3
+        elseif fm._ticks < 4 then
+            fm._ticks = 4
+        elseif fm._ticks < 5  then
             
             -- remove no path sign
             for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({type="flying-text"})) do
@@ -109,14 +114,13 @@ script.on_event(defines.events.on_tick, function(event)
     
             
             if fm.autorun.night then
-                game.players[event.player_index].surface.daytime = 0.5
                 fm._subfolder = "Night"
                 fm.gui.actions.generate(event)
             end
     
-            fm._ticks = 2
+            fm._ticks = 5
             
-        elseif fm._ticks < 3  then
+        elseif fm._ticks < 6  then
     
             for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
                 entity.active = true
@@ -125,7 +129,7 @@ script.on_event(defines.events.on_tick, function(event)
             fm._subfolder = nil
             fm._topfolder = nil
     
-            fm._ticks = 3
+            fm._ticks = 6
             game.write_file("FactorioMaps/done.txt", "done", false, event.player_index)
         end
 
