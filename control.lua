@@ -105,7 +105,17 @@ script.on_event(defines.events.on_tick, function(event)
             fm._ticks = 3
         elseif fm._ticks < 4 then
             fm._ticks = 4
-        elseif fm._ticks < 5  then
+        elseif fm._ticks < 5 then
+            fm._ticks = 5
+        elseif fm._ticks < 6 then
+            fm._ticks = 6
+        elseif fm._ticks < 7 then
+            fm._ticks = 7
+        elseif fm._ticks < 8 then
+            fm._ticks = 8
+        elseif fm._ticks < 9 then
+            fm._ticks = 9
+        elseif fm._ticks < 10  then
             
             -- remove no path sign
             for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({type="flying-text"})) do
@@ -118,9 +128,9 @@ script.on_event(defines.events.on_tick, function(event)
                 fm.gui.actions.generate(event)
             end
     
-            fm._ticks = 5
+            fm._ticks = 10
             
-        elseif fm._ticks < 6  then
+        elseif fm._ticks < 11  then
     
             for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
                 entity.active = true
@@ -129,7 +139,7 @@ script.on_event(defines.events.on_tick, function(event)
             fm._subfolder = nil
             fm._topfolder = nil
     
-            fm._ticks = 6
+            fm._ticks = 11
             game.write_file("FactorioMaps/done.txt", "done", false, event.player_index)
         end
 
