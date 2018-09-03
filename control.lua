@@ -73,9 +73,9 @@ script.on_event(defines.events.on_tick, function(event)
             fm._topfolder = fm.autorun.path
             
             -- freeze all entities. Eventually, stuff will run out of power, but for just 2 ticks, it should be fine.
-            for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
-                entity.active = false
-            end
+            -- for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
+            --     entity.active = false
+            -- end
             
             
             -- Remove ghosts
@@ -139,9 +139,9 @@ script.on_event(defines.events.on_tick, function(event)
             
         elseif fm._ticks < 16  then
     
-            for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
-                entity.active = true
-            end
+            -- for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
+            --     entity.active = true
+            -- end
 
             fm._subfolder = nil
             fm._topfolder = nil
