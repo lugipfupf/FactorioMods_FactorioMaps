@@ -80,6 +80,13 @@ script.on_event(defines.events.on_tick, function(event)
             for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({type="flying-text"})) do
                 entity.destroy()
             end
+            -- Remove ghosts
+            for _,entity in pairs(game.surfaces[1].find_entities_filtered{type= "entity-ghost"}) do
+                entity.destroy()
+            end
+            for _,entity in pairs(game.surfaces[1].find_entities_filtered{type= "tile-ghost"}) do
+                entity.destroy()
+            end
             
             -- freeze all entities. Eventually, stuff will run out of power, but for just 2 ticks, it should be fine.
             for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({})) do
