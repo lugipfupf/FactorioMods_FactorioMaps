@@ -1,5 +1,9 @@
-﻿fm.autorun = {
+﻿
+fm.autorun = {
     day = true,
-    night = false,
-    path = "user/jankran/first/2018-08-29/"
+    night = true,
+    around_build_range = 5.2,
+    smaller_types = {"lamp", "electric-pole", "radar", "straight-rail", "curved-rail", "rail-signal", "rail-chain-signal"},
+    around_smaller_range = 1,
+    path = "test/"
 }
