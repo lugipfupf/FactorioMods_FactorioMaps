@@ -38,7 +38,7 @@ def work(folder, start, stop, chunk):
 
                     for m in range(4):
                         if (os.path.isfile(paths[m])):
-                            result.paste(box=(coords[m][0]*size/2, coords[m][1]*size/2), im=Image.open(paths[m]).resize((size/2, size/2), Image.ANTIALIAS))
+                            result.paste(box=(coords[m][0]*size/2, coords[m][1]*size/2), im=Image.open(paths[m]).resize((size/2, size/2), Image.LANCZOS))
 
                     result.save(folder + str(k-1) + "/" + str(i/2) + "/" + str(j/2) + ext, format='JPEG', subsampling=0, quality=100)     
 
