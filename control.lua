@@ -71,13 +71,14 @@ script.on_event(defines.events.on_tick, function(event)
     
         if fm._ticks == nil then
         
-            fm._topfolder = "FactorioMaps/" .. fm.autorun.path
+            fm._topfolder = "FactorioMaps/" .. (fm.autorun.path or "")
+            
             game.remove_path(fm._topfolder)
             
             --fm.gui.actions.baseSize(event)
             
-            -- remove no path sign
-            for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({type="flying-text"})) do
+            -- remove no path sign and ghost entities
+            for key, entity in pairs(game.players[event.player_index].surface.find_entities_filtered({type={"flying-text","entity-ghost","tile-ghost"}})) do
                 entity.destroy()
             end
             -- Remove ghosts
