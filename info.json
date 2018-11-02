@@ -1,12 +1,12 @@
 {
-    "name": "FactorioMaps",
-    "version": "0.16.4",
-    "title": "Google Maps Factorio style",
-    "author": "jeroon, credomane",
-    "contact": "https://github.com/credomane/",
-    "homepage": "https://github.com/credomane/FactorioMods_FactorioMaps",
-    "description": "Create a Google Maps-like map of your Factorio game",
-    "license": "Free for all",
+    "name": "L0laapk3_FactorioMaps",
+    "version": "2.2.1",
+    "title": "FactorioMaps",
+    "author": "L0laapk3",
+    "contact": "https://github.com/L0laapk3/",
+    "homepage": "https://github.com/L0laapk3/FactorioMaps",
+    "description": "Generate timelapses of your base to view in browsers! Please read the instructions over at https://github.com/L0laapk3/FactorioMaps",
+    "license": "CC BY-NC-SA 4.0",
     "factorio_version": "0.16",
     "dependencies": []
 }

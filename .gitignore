@@ -1,3 +1,4 @@
 
 #Ignore release builds
 /build/
+*.pyc
