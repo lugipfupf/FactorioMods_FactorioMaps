@@ -19,7 +19,7 @@ def getQuality(zoom):
 		q = 78
 	elif(zoom == 17):
 		q = 80
-	elif(zoom = 16):
+	elif(zoom == 16):
 		q = 85
 	return q
 
