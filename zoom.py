@@ -12,11 +12,15 @@ ext = ".bmp"
 outext = ".jpg"		# format='JPEG' is hardcoded in places, meed to modify those, too. Most parameters are not supported outside jpeg.
 
 def getQuality(zoom):
-	q = 80
+	q = 90
 	if(zoom >= 19):
 		q = 75
 	elif(zoom == 18):
 		q = 78
+	elif(zoom == 17):
+		q = 80
+	elif(zoom = 16):
+		q = 85
 	return q
 
 
