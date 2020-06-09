@@ -116,7 +116,7 @@ if __name__ == '__main__':
 	psutil.Process(os.getpid()).nice(psutil.BELOW_NORMAL_PRIORITY_CLASS or -10)
 
 
-	toppath = os.path.join((sys.argv[5] if len(sys.argv) > 5 else "..\\..\\script-output\\FactorioMaps"), sys.argv[1])
+	toppath = os.path.join((sys.argv[5] if len(sys.argv) > 5 else "../../script-output/FactorioMaps"), sys.argv[1])
 	datapath = os.path.join(toppath, "mapInfo.json")
 	basepath = os.path.join(toppath, "Images")
 	maxthreads = mp.cpu_count()
@@ -202,4 +202,3 @@ if __name__ == '__main__':
 									processes.append(p)
 								for p in processes:
 									p.join()
-				

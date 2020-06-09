@@ -20,16 +20,16 @@ def parseArg(arg):
 args = sys.argv[1:]
 kwargs = {}
 args = filter(parseArg, args)
-foldername = args[0] if len(args) > 0 else os.path.splitext(os.path.basename(max([os.path.join("..\\..\\saves", basename) for basename in os.listdir("..\\..\\saves") if basename not in { "_autosave1.zip", "_autosave2.zip", "_autosave3.zip" }], key=os.path.getmtime)))[0]
+foldername = args[0] if len(args) > 0 else os.path.splitext(os.path.basename(max([os.path.join("../../saves", basename) for basename in os.listdir("../../saves") if basename not in { "_autosave1.zip", "_autosave2.zip", "_autosave3.zip" }], key=os.path.getmtime)))[0]
 savenames = args[1:] or [ foldername ]
 
 possiblePaths = [
-    "C:\\Program Files\\Factorio\\bin\\x64\\factorio.exe",
-    "D:\\Program Files\\Factorio\\bin\\x64\\factorio.exe",
-    "C:\\Games\\Factorio\\bin\\x64\\factorio.exe",
-    "D:\\Games\\Factorio\\bin\\x64\\factorio.exe",
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\bin\\x64\\factorio.exe",
-    "D:\\Program Files (x86)\\Steam\\steamapps\\common\\Factorio\\bin\\x64\\factorio.exe"
+    "C:/Program Files/Factorio/bin/x64/factorio.exe",
+    "D:/Program Files/Factorio/bin/x64/factorio.exe",
+    "C:/Games/Factorio/bin/x64/factorio.exe",
+    "D:/Games/Factorio/bin/x64/factorio.exe",
+    "C:/Program Files (x86)/Steam/steamapps/common/Factorio/bin/x64/factorio.exe",
+    "D:/Program Files (x86)/Steam/steamapps/common/Factorio/bin/x64/factorio.exe"
 ]
 try:
     factorioPath = next(x for x in ([kwargs["factorio"]] if "factorio" in kwargs else possiblePaths) if os.path.isfile(x))
@@ -40,7 +40,7 @@ print(factorioPath)
 
 psutil.Process(os.getpid()).nice(psutil.ABOVE_NORMAL_PRIORITY_CLASS or 5)
 
-basepath = kwargs["basepath"] if "basepath" in kwargs else "..\\..\\script-output\\FactorioMaps"
+basepath = kwargs["basepath"] if "basepath" in kwargs else "../../script-output/FactorioMaps"
 workthread = None
 
 
@@ -98,7 +98,7 @@ if os.path.isfile("autorun.lua"):
 print("enabling FactorioMaps mod")
 def changeModlist(newState):
     done = False
-    with open("..\\mod-list.json", "r") as f:
+    with open("../mod-list.json", "r") as f:
         modlist = json.load(f)
     for mod in modlist["mods"]:
         if mod["name"] == "L0laapk3_FactorioMaps":
@@ -106,7 +106,7 @@ def changeModlist(newState):
             done = True
     if not done:
         modlist["mods"].append({"name": "L0laapk3_FactorioMaps", "enabled": newState})
-    with open("..\\mod-list.json", "w") as f:
+    with open("../mod-list.json", "w") as f:
         json.dump(modlist, f, indent=2)
 
 changeModlist(True)
