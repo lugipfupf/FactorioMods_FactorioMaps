@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, platform
 import subprocess, signal
 import json
 import threading, psutil
@@ -23,7 +23,10 @@ args = filter(parseArg, args)
 foldername = args[0] if len(args) > 0 else os.path.splitext(os.path.basename(max([os.path.join("../../saves", basename) for basename in os.listdir("../../saves") if basename not in { "_autosave1.zip", "_autosave2.zip", "_autosave3.zip" }], key=os.path.getmtime)))[0]
 savenames = args[1:] or [ foldername ]
 
-possiblePaths = [
+possiblePathsLinux = [
+    "/opt/factorio/bin/x64/factorio"
+]
+possiblePathsWin = [
     "C:/Program Files/Factorio/bin/x64/factorio.exe",
     "D:/Program Files/Factorio/bin/x64/factorio.exe",
     "C:/Games/Factorio/bin/x64/factorio.exe",
@@ -31,6 +34,12 @@ possiblePaths = [
     "C:/Program Files (x86)/Steam/steamapps/common/Factorio/bin/x64/factorio.exe",
     "D:/Program Files (x86)/Steam/steamapps/common/Factorio/bin/x64/factorio.exe"
 ]
+
+if platform.system() == 'Windows':
+    possiblePaths = possiblePathsWin
+else:
+    possiblePaths = possiblePathsLinux
+
 try:
     factorioPath = next(x for x in ([kwargs["factorio"]] if "factorio" in kwargs else possiblePaths) if os.path.isfile(x))
 except StopIteration:
