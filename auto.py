@@ -47,7 +47,7 @@ except StopIteration:
 
 print(factorioPath)
 
-psutil.Process(os.getpid()).nice(psutil.ABOVE_NORMAL_PRIORITY_CLASS or 5)
+psutil.Process(os.getpid()).nice(5)
 
 basepath = kwargs["basepath"] if "basepath" in kwargs else "../../script-output/FactorioMaps"
 workthread = None
